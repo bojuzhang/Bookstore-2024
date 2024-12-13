@@ -2,6 +2,7 @@
 #define BLOCKLIST_HPP
 
 #include "MemoryRiver.hpp"
+#include "MyVector.hpp"
 #include <cstddef>
 #include <utility>
 #include <vector>
@@ -19,7 +20,7 @@ private:
     /* 块状链表的一块，存储所有键值对
 
     在文件上存储，采用 std::vector 代替链表*/
-    using BlockNode = std::vector<std::pair<Tkey, Tvalue>>;
+    using BlockNode = MyVector<std::pair<Tkey, Tvalue>, block_size * 2>;
     /* 用于存储从文件中转写下来的 HeadNode 链表，在析构时写入文件中
 
     采用手写链表：内存限制（相比std::vector），利于实现插入删除（相比std::array）*/
@@ -44,7 +45,7 @@ public:
 
     void BlockInsert(HeadList *, const std::pair<Tkey, Tvalue> &);
     void BlockDelete(HeadList *, const std::pair<Tkey, Tvalue> &);
-    void BlockModify(HeadList *, const std::vector<std::pair<Tkey, Tvalue>> &);
+    void BlockModify(HeadList *, const MyVector<std::pair<Tkey, Tvalue>, block_size * 2> &);
     std::vector<Tvalue> BlockFind(HeadList *, const Tkey &);
 
     void Insert(const std::pair<Tkey, Tvalue> &);

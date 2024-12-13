@@ -1,4 +1,5 @@
 #include "BlockList.hpp"
+#include "MyVector.hpp"
 #include <algorithm>
 #include <cstddef>
 #include <utility>
@@ -47,14 +48,10 @@ void BlockList<Tkey, Tvalue, max_size, block_size>::BlockInsert
 (HeadList *cur, const std::pair<Tkey, Tvalue> &v) {
     BlockNode vec;
     nodememory_.read(vec, cur->pos_);
-    if (vec.empty()) {
-        vec.reserve(block_size);
-    }
-    vec.insert(std::lower_bound(vec.begin(), vec.end(), v) ,v);
+    vec.insert(vec.lower_bound(v), v);
     if (vec.size() > block_size) {
         BlockNode L, R;
         size_t half = vec.size() / 2;
-        L.reserve(half), R.reserve(half);
         for (size_t i = 0; i < half; i++) {
             L.push_back(vec[i]);
         }
@@ -75,7 +72,7 @@ void BlockList<Tkey, Tvalue, max_size, block_size>::BlockInsert
 }
 template <typename Tkey, typename Tvalue, size_t max_size, size_t block_size>
 void BlockList<Tkey, Tvalue, max_size, block_size>::BlockModify
-(HeadList *cur, const std::vector<std::pair<Tkey, Tvalue>> &v) {
+(HeadList *cur, const MyVector<std::pair<Tkey, Tvalue>, block_size * 2> &v) {
     BlockNode vec;
     nodememory_.read(vec, cur->pos_);
     vec = v;
@@ -101,7 +98,8 @@ std::vector<Tvalue> BlockList<Tkey, Tvalue, max_size, block_size>::BlockFind
     BlockNode vec;
     nodememory_.read(vec, cur->pos_);
     std::vector<Tvalue> res;
-    for (const auto &x : vec) {
+    for (size_t i = 0; i < vec.size(); i++) {
+        auto x = vec[i];
         if (x.first == key) {
             res.push_back(x.second);
         }
@@ -162,8 +160,8 @@ std::vector<Tvalue> BlockList<Tkey, Tvalue, max_size, block_size>::Find(const Tk
     while (1) {
         if (p->node_.head_.first <= key && key <= p->node_.end_) {
             auto vec = BlockFind(p, key);
-            for (const auto &x : vec) {
-                res.push_back(x);
+            for (size_t i = 0; i < vec.size(); i++) {
+                res.push_back(vec[i]);
             }
         }
         if (!p->nxt_ || p->nxt_->node_.head_.first > key) {
