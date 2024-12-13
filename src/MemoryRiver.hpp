@@ -9,7 +9,7 @@ using std::fstream;
 using std::ifstream;
 using std::ofstream;
 
-template<class T, int info_len = 2>
+template<class T, size_t info_len = 2>
 class MemoryRiver {
 private:
     /* your code here */
@@ -17,7 +17,7 @@ private:
     fstream file;
     string file_name;
     int sizeofT = sizeof(T);
-    int len_{};
+    size_t len_{};
 public:
     MemoryRiver() = default;
 
@@ -39,7 +39,7 @@ public:
     }
 
     //读出第n个int的值赋给tmp，1_base
-    void get_info(int &tmp, int n) {
+    void get_info(int &tmp, size_t n) {
         if (n > info_len) return;
         if (!file.is_open()) {
             file.open(file_name, std::ios::in | std::ios::out);
@@ -49,7 +49,7 @@ public:
     }
 
     //将tmp写入第n个int的位置，1_base
-    void write_info(int tmp, int n) {
+    void write_info(int tmp, size_t n) {
         if (n > info_len) return;
         if (!file.is_open()) {
             file.open(file_name, std::ios::in | std::ios::out);
@@ -73,7 +73,7 @@ public:
     }
 
     //用t的值更新位置索引index对应的对象，保证调用的index都是由write函数产生
-    void update(T &t, const int index) {
+    void update(T &t, const size_t index) {
         if (!file.is_open()) {
             file.open(file_name, std::ios::in | std::ios::out);
         }
@@ -83,7 +83,7 @@ public:
     }
 
     //读出位置索引index对应的T对象的值并赋值给t，保证调用的index都是由write函数产生
-    void read(T &t, const int index) {
+    void read(T &t, const size_t index) {
         if (!file.is_open()) {
             file.open(file_name, std::ios::in | std::ios::out);
         }
