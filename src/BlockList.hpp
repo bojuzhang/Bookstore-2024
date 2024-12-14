@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 #ifndef BLOCKLIST_HPP
 #define BLOCKLIST_HPP
 
@@ -57,18 +58,21 @@ public:
 
 template <class Tkey, class Tvalue, size_t max_size, size_t block_size>
 BlockList<Tkey, Tvalue, max_size, block_size>::BlockList(const std::string &file_name) {
-    headmemory_.initialise(file_name + "_head");
-    nodememory_.initialise(file_name + "_node");
+    headmemory_.initialise(file_name + "_head", 1);
+    nodememory_.initialise(file_name + "_node", 1);
     
     int t = 0;
-    headmemory_.get_info(t, 1);
+    headmemory_.get_info(t, 2);
     size_ = t;
+    // std::cerr << size_ << "\n";
 
     if (size_) {
-        headmemory_.get_info(t, 2);
+        headmemory_.get_info(t, 3);
         size_t head_pos = t;
+        // std::cerr << "test " << head_pos << " " << t << "\n";
         HeadNode node;
         headmemory_.read(node, head_pos);
+        // std::cerr << node.pos_ << " " << node.head_.second << " " << node.end_.second << " " << node.nxt_ << "\n";
         head_ = new HeadList(node, node.pos_);
         auto cur = head_;
         while (node.nxt_) {
@@ -78,12 +82,16 @@ BlockList<Tkey, Tvalue, max_size, block_size>::BlockList(const std::string &file
             cur = p;
         }
     }
+    // std::cerr << "end\n";
 }
 
 template <class Tkey, class Tvalue, size_t max_size, size_t block_size>
 BlockList<Tkey, Tvalue, max_size, block_size>::~BlockList() {
-    headmemory_.write_info(size_, 1);
-    headmemory_.write_info(head_->pos_, 2);
+    headmemory_.write_info(size_, 2);
+    headmemory_.write_info(head_->pos_, 3);
+    int t;
+    headmemory_.get_info(t, 2);
+    // std::cerr << "test " << size_ << " " << t << " " << head_->pos_ << "\n";
     while (1) {
         headmemory_.update(head_->node_, head_->pos_);
         auto tmp = head_->nxt_;
@@ -137,7 +145,8 @@ void BlockList<Tkey, Tvalue, max_size, block_size>::BlockDelete
     MyVector<std::pair<Tkey, Tvalue>, block_size * 2> vec;
     nodememory_.read(vec, cur->pos_);
     auto p = vec.lower_bound(v);
-    if (p != size_ && vec[p] == v) {
+    // std::cerr << "DELETE: " << p << " " << vec.size() << " " << (vec[p] == v) << "\n";
+    if (p == size_ || vec[p] != v) {
         return;
     }
     vec.erase(p);
@@ -148,6 +157,7 @@ template <class Tkey, class Tvalue, size_t max_size, size_t block_size>
 std::vector<Tvalue> BlockList<Tkey, Tvalue, max_size, block_size>::BlockFind
 (HeadList *cur, const Tkey &key) {
     BlockNode vec;
+    // std::cerr << cur->pos_ << " " << sizeof(BlockNode) << "\n";
     nodememory_.read(vec, cur->pos_);
     std::vector<Tvalue> res;
     for (size_t i = 0; i < vec.size(); i++) {
@@ -211,12 +221,15 @@ std::vector<Tvalue> BlockList<Tkey, Tvalue, max_size, block_size>::Find(const Tk
     auto p = head_;
     std::vector<Tvalue> res;
     while (1) {
+        // std::cerr << "etst\n";
+        // std::cerr << p->node_.head_.first << " " << p->node_.end_.first << " " << p->nxt_ << "\n";
         if (p->node_.head_.first <= key && key <= p->node_.end_.first) {
             auto vec = BlockFind(p, key);
             for (size_t i = 0; i < vec.size(); i++) {
                 res.push_back(vec[i]);
             }
         }
+        // std::cerr << "end\n";
         if (!p->nxt_ || p->nxt_->node_.head_.first > key) {
             break;
         }

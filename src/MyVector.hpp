@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 #ifndef MYVECTOR_HPP
 #define MYVECTOR_HPP
 
@@ -23,6 +24,13 @@ public:
     void erase(size_t);
     T operator [] (size_t);
     T back() {return a[size_ - 1];}
+
+    void print() {
+        std::cerr << "size: " << size_ << "\n";
+        for (size_t i = 0; i < size_; i++) {
+            std::cerr << a[i] << "\n";
+        }
+    };
 };
 
 template <typename T, size_t max_size>

@@ -3,17 +3,19 @@
 
 #include <cstddef>
 #include <fstream>
+#include <ios>
+#include <iostream>
 
 using std::string;
 using std::fstream;
 using std::ifstream;
 using std::ofstream;
 
-template<class T, size_t info_len = 2>
+template<class T, size_t info_len = 3>
 class MemoryRiver {
 private:
     /* your code here */
-    const size_t sizeofsizet = sizeof(size_t);
+    const size_t sizeofint = sizeof(int);
     fstream file;
     string file_name;
     int sizeofT = sizeof(T);
@@ -24,17 +26,35 @@ public:
     MemoryRiver(const string& file_name) : file_name(file_name) {}
 
     ~MemoryRiver() {
-        if (file.is_open()) {
-            file.close();
+        if (!file.is_open()) {
+            file.open(file_name, std::ios::in | std::ios::out);
         }
+        int t = len_;
+        write_info(t, 1);
+        file.close();
     }
 
-    void initialise(string FN = "") {
+    void initialise(string FN = "", bool clear_file = 0) {
         if (FN != "") file_name = FN;
-        file.open(file_name, std::ios::out);
-        int tmp = 0;
-        for (int i = 0; i < info_len; ++i)
-            file.write(reinterpret_cast<char *>(&tmp), sizeof(int));
+        // std::cerr << "test " << sizeofT << "\n";
+        if (clear_file == 0) {
+            file.open(file_name, std::ios::out);
+            int tmp = 0;
+            for (int i = 0; i < info_len; ++i)
+                file.write(reinterpret_cast<char *>(&tmp), sizeof(int));
+        } else {
+            file.open(file_name, std::ios::in);
+            if (!file) {
+                file.open(file_name, std::ios::out);
+                int tmp = 0;
+                for (int i = 0; i < info_len; ++i)
+                    file.write(reinterpret_cast<char *>(&tmp), sizeof(int));
+            } else {
+                int t;
+                get_info(t, 1);
+                len_ = t;
+            }
+        }
         file.close();
     }
 
@@ -44,8 +64,8 @@ public:
         if (!file.is_open()) {
             file.open(file_name, std::ios::in | std::ios::out);
         }
-        file.seekg(n * sizeofsizet);
-        file.read(reinterpret_cast<char *>(&tmp), sizeofsizet);
+        file.seekg((n - 1) * sizeofint);
+        file.read(reinterpret_cast<char *>(&tmp), sizeofint);
     }
 
     //将tmp写入第n个int的位置，1_base
@@ -54,8 +74,8 @@ public:
         if (!file.is_open()) {
             file.open(file_name, std::ios::in | std::ios::out);
         }
-        file.seekp(n * sizeofsizet);
-        file.write(reinterpret_cast<char *>(&tmp), sizeofsizet);
+        file.seekp((n - 1) * sizeofint);
+        file.write(reinterpret_cast<char *>(&tmp), sizeofint);
     }
 
     //在文件合适位置写入类对象t，并返回写入的位置索引index
@@ -65,7 +85,7 @@ public:
         if (!file.is_open()) {
             file.open(file_name, std::ios::in | std::ios::out);
         }
-        size_t pos = info_len * sizeofsizet + len_ * sizeofT;
+        size_t pos = info_len * sizeofint + len_ * sizeofT;
         file.seekp(pos);
         file.write(reinterpret_cast<char *>(&t), sizeofT);
         ++len_;
@@ -77,7 +97,7 @@ public:
         if (!file.is_open()) {
             file.open(file_name, std::ios::in | std::ios::out);
         }
-        size_t pos = info_len * sizeofsizet + index * sizeofT;
+        size_t pos = info_len * sizeofint + index * sizeofT;
         file.seekp(pos);
         file.write(reinterpret_cast<char *>(&t), sizeofT);
     }
@@ -87,15 +107,15 @@ public:
         if (!file.is_open()) {
             file.open(file_name, std::ios::in | std::ios::out);
         }
-        size_t pos = info_len * sizeofsizet + index * sizeofT;
+        size_t pos = info_len * sizeofint + index * sizeofT;
         file.seekg(pos);
         file.read(reinterpret_cast<char *>(&t), sizeofT);
     }
 
-    //删除位置索引index对应的对象(不涉及空间回收时，可忽略此函数)，保证调用的index都是由write函数产生
-    void Delete(int index) {
-        /* your code here */
-    }
+    // //删除位置索引index对应的对象(不涉及空间回收时，可忽略此函数)，保证调用的index都是由write函数产生
+    // void Delete(int index) {
+    //     /* your code here */
+    // }
 };
 
 
