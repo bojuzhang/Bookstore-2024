@@ -61,7 +61,7 @@ public:
     //在文件合适位置写入类对象t，并返回写入的位置索引index
     //位置索引意味着当输入正确的位置索引index，在以下三个函数中都能顺利的找到目标对象进行操作
     //位置索引index可以取为对象写入的起始位置
-    int write(T &t) {
+    size_t write(T &t) {
         if (!file.is_open()) {
             file.open(file_name, std::ios::in | std::ios::out);
         }

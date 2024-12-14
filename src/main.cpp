@@ -5,7 +5,7 @@
 
 BlockList<std::string, int> T("testBlockList");
 
-int main() {
+int main(int argc, const char *argv[]) {
     int n;
     std::cin >> n;
     while (n--) {
