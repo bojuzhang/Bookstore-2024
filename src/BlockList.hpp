@@ -152,6 +152,7 @@ void BlockList<Tkey, Tvalue, max_size, block_size>::BlockDelete
     vec.erase(p);
     nodememory_.update(vec, cur->pos_);
     cur->node_ = {vec[0], vec.back(), vec.size(), cur->node_.nxt_, cur->node_.pos_};
+    --size_;
 }
 template <class Tkey, class Tvalue, size_t max_size, size_t block_size>
 std::vector<Tvalue> BlockList<Tkey, Tvalue, max_size, block_size>::BlockFind
