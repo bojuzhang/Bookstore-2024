@@ -123,8 +123,8 @@ void BlockList<Tkey, Tvalue, max_size, block_size>::BlockInsert
         nodememory_.update(L, cur->pos_);
         auto tmp = cur->nxt_;
         cur->nxt_ = p;
-        cur->node_.nxt_ = pos;
         p->nxt_ = tmp;
+        cur->node_ = {L[0], L.back(), L.size(), pos, cur->node_.pos_};
     } else {
         nodememory_.update(vec, cur->pos_);
         cur->node_ = {vec[0], vec.back(), vec.size(), cur->node_.nxt_, cur->node_.pos_};
@@ -145,7 +145,7 @@ void BlockList<Tkey, Tvalue, max_size, block_size>::BlockDelete
     MyVector<std::pair<Tkey, Tvalue>, block_size * 2> vec;
     nodememory_.read(vec, cur->pos_);
     auto p = vec.lower_bound(v);
-    // std::cerr << "DELETE: " << p << " " << vec.size() << " " << (vec[p] == v) << "\n";
+    // std::cerr << "DELETE: " << p << " " << vec.size() << " " << (vec[p] == v) << " " << vec.back().first << " " << vec.back().second << "\n";
     if (p == size_ || vec[p] != v) {
         return;
     }
