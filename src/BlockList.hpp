@@ -1,5 +1,4 @@
 #pragma once
-#include <iostream>
 #ifndef BLOCKLIST_HPP
 #define BLOCKLIST_HPP
 
@@ -56,13 +55,11 @@ BlockList<Tkey, Tvalue, max_size, block_size>::BlockList(const std::string &file
     int t = 0;
     headmemory_.get_info(t, 2);
     size_ = t;
-    // std::cerr << size_ << "\n";
     headmemory_.get_info(t, 1);
     if (t != 0) {
         headmemory_.read(headlist_, 0);
         len_ = headlist_.size();
     }
-    // std::cerr << "end\n";
 }
 
 template <class Tkey, class Tvalue, size_t max_size, size_t block_size>
@@ -123,7 +120,6 @@ void BlockList<Tkey, Tvalue, max_size, block_size>::BlockDelete
     MyVector<std::pair<Tkey, Tvalue>, block_size * 2> vec;
     nodememory_.read(vec, cur.pos_);
     auto p = vec.lower_bound(v);
-    // std::cerr << "DELETE: " << p << " " << vec.size() << " " << (vec[p] == v) << " " << vec.back().first << " " << vec.back().second << "\n";
     if (p == size_ || vec[p] != v) {
         return;
     }
@@ -136,7 +132,6 @@ template <class Tkey, class Tvalue, size_t max_size, size_t block_size>
 std::vector<Tvalue> BlockList<Tkey, Tvalue, max_size, block_size>::BlockFind
 (HeadNode &cur, const Tkey &key) {
     BlockNode vec;
-    // std::cerr << cur->pos_ << " " << sizeof(BlockNode) << "\n";
     nodememory_.read(vec, cur.pos_);
     std::vector<Tvalue> res;
     for (size_t i = 0; i < vec.size(); i++) {

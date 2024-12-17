@@ -36,7 +36,6 @@ public:
 
     void initialise(string FN = "", bool clear_file = 0) {
         if (FN != "") file_name = FN;
-        // std::cerr << "test " << sizeofT << "\n";
         if (clear_file == 0) {
             file.open(file_name, std::ios::out);
             int tmp = 0;
