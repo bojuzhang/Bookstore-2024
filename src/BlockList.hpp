@@ -80,7 +80,7 @@ BlockList<Tkey, Tvalue, max_size, block_size>::~BlockList() {
 
 template <class Tkey, class Tvalue, size_t max_size, size_t block_size>
 void BlockList<Tkey, Tvalue, max_size, block_size>::BlockInsert
-(HeadNode &cur, const std::pair<Tkey, Tvalue> &v, size_t pos) {
+(HeadNode &cur, const std::pair<Tkey, Tvalue> &v, size_t headnodepos) {
     BlockNode vec;
     nodememory_.read(vec, cur.pos_);
     vec.insert(vec.lower_bound(v), v);
@@ -97,7 +97,10 @@ void BlockList<Tkey, Tvalue, max_size, block_size>::BlockInsert
         nodememory_.update(L, cur.pos_);
         HeadNode p = {R[0], R.back(), R.size(), cur.nxt_, pos};
         cur = {L[0], L.back(), L.size(), pos, cur.pos_};
-        headlist_.insert(pos + 1, p);
+        headlist_.insert(headnodepos + 1, p);
+        BlockNode p1, p2;
+        nodememory_.read(p1, headlist_[headnodepos].pos_);
+        nodememory_.read(p2, headlist_[headnodepos + 1].pos_);
         ++len_;
     } else {
         nodememory_.update(vec, cur.pos_);
@@ -158,7 +161,7 @@ void BlockList<Tkey, Tvalue, max_size, block_size>::Insert
                 BlockInsert(headlist_[i], v, i);
                 break;
             }
-            if (v < headlist_[i].head_) {
+            if (v < headlist_[i + 1].head_) {
                 BlockInsert(headlist_[i], v, i);
                 break;
             }
