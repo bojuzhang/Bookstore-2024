@@ -22,8 +22,10 @@ public:
     size_t lower_bound(const T &);
     void insert(size_t, const T &);
     void erase(size_t);
-    T operator [] (size_t);
-    T back() {return a[size_ - 1];}
+    T& operator [] (size_t);
+    const T& operator [] (size_t) const;
+    T& back() {return a[size_ - 1];}
+    const T& back() const {return a[size_ - 1];}
 
     void print() {
         std::cerr << "size: " << size_ << "\n";
@@ -51,7 +53,11 @@ void MyVector<T, max_size>::push_back(const T &v) {
 }
 
 template <typename T, size_t max_size>
-T MyVector<T, max_size>::operator [] (size_t pos) {
+T& MyVector<T, max_size>::operator [] (size_t pos) {
+    return a[pos];
+}
+template <typename T, size_t max_size>
+const T& MyVector<T, max_size>::operator [] (size_t pos) const {
     return a[pos];
 }
 template <typename T, size_t max_size>
