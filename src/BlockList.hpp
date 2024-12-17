@@ -60,6 +60,7 @@ BlockList<Tkey, Tvalue, max_size, block_size>::BlockList(const std::string &file
     headmemory_.get_info(t, 1);
     if (t != 0) {
         headmemory_.read(headlist_, 0);
+        len_ = headlist_.size();
     }
     // std::cerr << "end\n";
 }

@@ -11,7 +11,7 @@ using std::fstream;
 using std::ifstream;
 using std::ofstream;
 
-template<class T, size_t info_len = 3>
+template<class T, size_t info_len = 4>
 class MemoryRiver {
 private:
     /* your code here */
