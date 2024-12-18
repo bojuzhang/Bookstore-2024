@@ -8,7 +8,7 @@
 #include <utility>
 #include <vector>
 
-template <class Tkey, class Tvalue, size_t max_size = 100000, size_t block_size = 100>
+template <class Tkey, class Tvalue, size_t max_size = 100000, size_t block_size = 30>
 class BlockList {
 private:
     // 存储每一个 BlockNode 的信息，并记录下一个在哪个位置（链表）
