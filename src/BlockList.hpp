@@ -41,6 +41,8 @@ public:
     void BlockModify(HeadNode &, const MyVector<std::pair<Tkey, Tvalue>, block_size * 2> &);
     std::vector<Tvalue> BlockFind(HeadNode &, const Tkey &);
 
+    size_t FindPos(const std::pair<Tkey, Tvalue> &);
+
     void Insert(const std::pair<Tkey, Tvalue> &);
     void Delete(const std::pair<Tkey, Tvalue> &);
     std::vector<Tvalue> Find(const Tkey &);
@@ -144,6 +146,22 @@ std::vector<Tvalue> BlockList<Tkey, Tvalue, max_size, block_size>::BlockFind
 }
 
 template <class Tkey, class Tvalue, size_t max_size, size_t block_size>
+size_t BlockList<Tkey, Tvalue, max_size, block_size>::FindPos(const std::pair<Tkey, Tvalue> &v) {
+    int l = 0, r = len_ - 1, ans = len_;
+    while (l <= r) {
+        int mid = (l + r) / 2;
+        if (headlist_[mid].head_ > v) {
+            r = mid - 1;
+            ans = mid;
+        } else {
+            l = mid + 1;
+        }
+    }
+    if (ans == 0) return 0;
+    else return ans - 1;
+}
+
+template <class Tkey, class Tvalue, size_t max_size, size_t block_size>
 void BlockList<Tkey, Tvalue, max_size, block_size>::Insert
 (const std::pair<Tkey, Tvalue> &v) {
     if (size_ == 0) {
@@ -152,16 +170,8 @@ void BlockList<Tkey, Tvalue, max_size, block_size>::Insert
         len_ = 1;
         headlist_ = HeadList(HeadNode{v, v, 1, 0, pos});
     } else {
-        for (int i = 0; i < len_; i++) {
-            if (i + 1 == len_) {
-                BlockInsert(headlist_[i], v, i);
-                break;
-            }
-            if (v < headlist_[i + 1].head_) {
-                BlockInsert(headlist_[i], v, i);
-                break;
-            }
-        }
+        int pos = FindPos(v);
+        BlockInsert(headlist_[pos], v, pos);
     }
     ++size_;
 }
@@ -172,14 +182,9 @@ void BlockList<Tkey, Tvalue, max_size, block_size>::Delete
     if (size_ == 0) {
         return;
     } 
-    for (int i = 0; i < len_; i++) {
-        if (headlist_[i].head_ <= v && v <= headlist_[i].end_) {
-            BlockDelete(headlist_[i], v);
-            break;
-        }
-        if (headlist_[i].head_ > v) {
-            break;
-        }
+    int pos = FindPos(v);
+    if (headlist_[pos].head_ <= v && v <= headlist_[pos].end_) {
+        BlockDelete(headlist_[pos], v);
     }
 }
 
