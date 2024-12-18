@@ -1,4 +1,5 @@
 #pragma once
+#include <algorithm>
 #include <iostream>
 #ifndef MYVECTOR_HPP
 #define MYVECTOR_HPP
@@ -9,10 +10,11 @@
 
 template <class T, size_t max_size>
 class MyVector {
-private:
+protected:
     std::array<T, max_size> a{};
     size_t size_;
 public:
+
     MyVector() {size_ = 0;}
     MyVector(const T &);
     MyVector(const std::vector<T> &);
@@ -27,12 +29,12 @@ public:
     T& back() {return a[size_ - 1];}
     const T& back() const {return a[size_ - 1];}
 
-    void print() {
-        std::cerr << "size: " << size_ << "\n";
-        for (size_t i = 0; i < size_; i++) {
-            std::cerr << a[i] << "\n";
-        }
-    };
+    // virtual void print() {
+    //     std::cerr << "size: " << size_ << "\n";
+    //     for (size_t i = 0; i < size_; i++) {
+    //         std::cerr << a[i] << "\n";
+    //     }
+    // };
 };
 
 template <typename T, size_t max_size>
@@ -89,6 +91,57 @@ size_t MyVector<T, max_size>::lower_bound(const T &v) {
     }
     return ans;
 }
+
+template <size_t max_size>
+class MyString : public MyVector<char, max_size> {
+public:
+    using MyVector<char, max_size>::MyVector;
+    bool operator < (const MyString<max_size> &other) const {
+        auto len = std::min(this->size_, other.size_);
+        for (size_t i = 0; i < len; i++) {
+            if (this->a[i] != other.a[i]) {
+                return this->a[i] < other.a[i];
+            }
+        }
+        return this->size_ < other.size_;
+    }
+    bool operator > (const MyString<max_size> &other) const {
+        auto len = std::min(this->size_, other.size_);
+        for (size_t i = 0; i < len; i++) {
+            if (this->a[i] != other.a[i]) {
+                return this->a[i] > other.a[i];
+            }
+        }
+        return this->size_ > other.size_;
+    }
+    bool operator == (const MyString<max_size> &other) const {
+        auto len = std::min(this->size_, other.size_);
+        if (this->size_ != other.size_) {
+            return false;
+        }
+        for (size_t i = 0; i < len; i++) {
+            if (this->a[i] != other.a[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+    bool operator <= (const MyString<max_size> &other) const {
+        return !((*this) > other);
+    }
+    bool operator >= (const MyString<max_size> &other) const {
+        return !((*this) < other);
+    }
+    bool operator != (const MyString<max_size> &other) const {
+        return !((*this) == other);
+    }
+    MyString (const std::string &s) {
+        this->size_ = s.size();
+        for (size_t i = 0; i < this->size_; i++) {
+            this->a[i] = s[i];
+        }
+    }
+};
 
 // TEST_CASE("MyVector is correct", "[MyVector]") {
 //     MyVector<int, 100> ve;

@@ -1,10 +1,12 @@
 #include "BlockList.hpp"
 #include "MyHash.hpp"
+#include "MyVector.hpp"
 #include <iostream>
+#include <ostream>
 #include <string>
 #include <utility>
 
-BlockList<int, int> T("testBlockList");
+BlockList<MyString<64>, int> T("testBlockList");
 
 int main(int argc, const char *argv[]) {
     int n;
@@ -13,8 +15,9 @@ int main(int argc, const char *argv[]) {
         std::string op, index;
         int value;
         std::cin >> op >> index;
+        MyString<64> s(index);
         if (op == "find") {
-            auto ans = T.Find(GetHash(index));
+            auto ans = T.Find(s);
             if (ans.empty()) {
                 std::cout << "null\n";
             } else {
@@ -25,13 +28,14 @@ int main(int argc, const char *argv[]) {
             }
         } else if (op == "insert") {
             std::cin >> value;
-            auto p = std::make_pair(GetHash(index), value);
+            auto p = std::make_pair(s, value);
             T.Insert(p);
         } else {
             std::cin >> value;
-            T.Delete(std::make_pair(GetHash(index), value));
+            T.Delete(std::make_pair(s, value));
         }
     }
+
 
     // using node = MyVector<int, 100>;
     // MemoryRiver<node> a("123456");
