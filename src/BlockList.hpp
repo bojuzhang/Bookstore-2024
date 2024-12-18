@@ -21,8 +21,8 @@ private:
     /* 块状链表的一块，存储所有键值对
 
     在文件上存储，采用 MyVector 代替链表*/
-    using BlockNode = MyVector<std::pair<Tkey, Tvalue>, block_size * 2>;
-    using HeadList = MyVector<HeadNode, max_size / block_size * 2>;
+    using BlockNode = MyVector<std::pair<Tkey, Tvalue>, block_size + 5>;
+    using HeadList = MyVector<HeadNode, max_size / block_size + 5>;
 
     HeadList headlist_;
 
@@ -38,7 +38,7 @@ public:
 
     void BlockInsert(HeadNode &, const std::pair<Tkey, Tvalue> &, size_t);
     void BlockDelete(HeadNode &, const std::pair<Tkey, Tvalue> &);
-    void BlockModify(HeadNode &, const MyVector<std::pair<Tkey, Tvalue>, block_size * 2> &);
+    void BlockModify(HeadNode &, const MyVector<std::pair<Tkey, Tvalue>, block_size + 5> &);
     std::vector<Tvalue> BlockFind(HeadNode &, const Tkey &);
 
     size_t FindPos(const std::pair<Tkey, Tvalue> &);
@@ -109,7 +109,7 @@ void BlockList<Tkey, Tvalue, max_size, block_size>::BlockInsert
 }
 template <class Tkey, class Tvalue, size_t max_size, size_t block_size>
 void BlockList<Tkey, Tvalue, max_size, block_size>::BlockModify
-(HeadNode &cur, const MyVector<std::pair<Tkey, Tvalue>, block_size * 2> &v) {
+(HeadNode &cur, const MyVector<std::pair<Tkey, Tvalue>, block_size + 5> &v) {
     BlockNode vec;
     nodememory_.read(vec, cur.pos_);
     vec = v;
@@ -119,7 +119,7 @@ void BlockList<Tkey, Tvalue, max_size, block_size>::BlockModify
 template <class Tkey, class Tvalue, size_t max_size, size_t block_size>
 void BlockList<Tkey, Tvalue, max_size, block_size>::BlockDelete
 (HeadNode &cur, const std::pair<Tkey, Tvalue> &v) {
-    MyVector<std::pair<Tkey, Tvalue>, block_size * 2> vec;
+    MyVector<std::pair<Tkey, Tvalue>, block_size + 5> vec;
     nodememory_.read(vec, cur.pos_);
     auto p = vec.lower_bound(v);
     if (p == size_ || vec[p] != v) {
