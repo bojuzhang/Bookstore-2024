@@ -16,7 +16,7 @@ private:
         std::pair<Tkey, Tvalue> head_;
         std::pair<Tkey, Tvalue> end_;
         size_t size_;
-        size_t nxt_, pos_;
+        size_t pos_;
     };
     /* 块状链表的一块，存储所有键值对
 
@@ -95,8 +95,8 @@ void BlockList<Tkey, Tvalue, max_size, block_size>::BlockInsert
         }
         size_t pos = nodememory_.write(R);
         nodememory_.update(L, cur.pos_);
-        HeadNode p = {R[0], R.back(), R.size(), cur.nxt_, pos};
-        cur = {L[0], L.back(), L.size(), pos, cur.pos_};
+        HeadNode p = {R[0], R.back(), R.size(), pos};
+        cur = {L[0], L.back(), L.size(), cur.pos_};
         headlist_.insert(headnodepos + 1, p);
         BlockNode p1, p2;
         nodememory_.read(p1, headlist_[headnodepos].pos_);
@@ -104,7 +104,7 @@ void BlockList<Tkey, Tvalue, max_size, block_size>::BlockInsert
         ++len_;
     } else {
         nodememory_.update(vec, cur.pos_);
-        cur = {vec[0], vec.back(), vec.size(), cur.nxt_, cur.pos_};
+        cur = {vec[0], vec.back(), vec.size(), cur.pos_};
     }
 }
 template <class Tkey, class Tvalue, size_t max_size, size_t block_size>
@@ -114,7 +114,7 @@ void BlockList<Tkey, Tvalue, max_size, block_size>::BlockModify
     nodememory_.read(vec, cur.pos_);
     vec = v;
     nodememory_.update(vec, cur.pos_);
-    cur = {vec[0], vec.back(), vec.size(), cur.nxt_, cur.pos_};
+    cur = {vec[0], vec.back(), vec.size(), cur.pos_};
 }
 template <class Tkey, class Tvalue, size_t max_size, size_t block_size>
 void BlockList<Tkey, Tvalue, max_size, block_size>::BlockDelete
@@ -127,7 +127,7 @@ void BlockList<Tkey, Tvalue, max_size, block_size>::BlockDelete
     }
     vec.erase(p);
     nodememory_.update(vec, cur.pos_);
-    cur = {vec[0], vec.back(), vec.size(), cur.nxt_, cur.pos_};
+    cur = {vec[0], vec.back(), vec.size(), cur.pos_};
     --size_;
 }
 template <class Tkey, class Tvalue, size_t max_size, size_t block_size>
@@ -168,7 +168,7 @@ void BlockList<Tkey, Tvalue, max_size, block_size>::Insert
         auto p = BlockNode(v);
         auto pos = nodememory_.write(p);
         len_ = 1;
-        headlist_ = HeadList(HeadNode{v, v, 1, 0, pos});
+        headlist_ = HeadList(HeadNode{v, v, 1, pos});
     } else {
         int pos = FindPos(v);
         BlockInsert(headlist_[pos], v, pos);
