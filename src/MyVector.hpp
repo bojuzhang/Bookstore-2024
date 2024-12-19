@@ -1,6 +1,7 @@
 #pragma once
 #include <algorithm>
 #include <iostream>
+#include <ostream>
 #ifndef MYVECTOR_HPP
 #define MYVECTOR_HPP
 
@@ -14,7 +15,6 @@ protected:
     std::array<T, max_size> a{};
     size_t size_;
 public:
-
     MyVector() {size_ = 0;}
     MyVector(const T &);
     MyVector(const std::vector<T> &);
@@ -28,6 +28,15 @@ public:
     const T& operator [] (size_t) const;
     T& back() {return a[size_ - 1];}
     const T& back() const {return a[size_ - 1];}
+
+    MyVector& operator = (const MyVector &other) {
+        a = other.a;
+        size_ = other.size_;
+    }
+    MyVector(const MyVector &other) {
+        a = other.a;
+        size_ = other.size_;
+    }
 
     // virtual void print() {
     //     std::cerr << "size: " << size_ << "\n";
@@ -141,7 +150,17 @@ public:
             this->a[i] = s[i];
         }
     }
+    friend std::ostream& operator << (std::ostream &os, const MyString &v) {
+        for (size_t i = 0; i < v.size_; i++) {
+            os << v.a[i];
+        }
+        return os;
+    }
 };
+
+using string20 = MyString<20>;
+using string30 = MyString<30>;
+using string60 = MyString<60>;
 
 // TEST_CASE("MyVector is correct", "[MyVector]") {
 //     MyVector<int, 100> ve;

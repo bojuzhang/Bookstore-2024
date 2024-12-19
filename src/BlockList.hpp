@@ -40,12 +40,14 @@ public:
     void BlockDelete(HeadNode &, const std::pair<Tkey, Tvalue> &);
     void BlockModify(HeadNode &, const MyVector<std::pair<Tkey, Tvalue>, block_size + 5> &);
     std::vector<Tvalue> BlockFind(HeadNode &, const Tkey &);
+    std::vector<Tvalue> BlockFindAll(HeadNode &);
 
     size_t FindPos(const std::pair<Tkey, Tvalue> &);
 
     void Insert(const std::pair<Tkey, Tvalue> &);
     void Delete(const std::pair<Tkey, Tvalue> &);
     std::vector<Tvalue> Find(const Tkey &);
+    std::vector<Tvalue> FindAll();
     size_t size() {return size_;}
 };
 
@@ -144,6 +146,18 @@ std::vector<Tvalue> BlockList<Tkey, Tvalue, max_size, block_size>::BlockFind
     }
     return res;
 }
+template <class Tkey, class Tvalue, size_t max_size, size_t block_size>
+std::vector<Tvalue> BlockList<Tkey, Tvalue, max_size, block_size>::BlockFindAll
+(HeadNode &cur) {
+    BlockNode vec;
+    nodememory_.read(vec, cur.pos_);
+    std::vector<Tvalue> res;
+    for (size_t i = 0; i < vec.size(); i++) {
+        auto x = vec[i];
+        res.push_back(x.second);
+    }
+    return res;
+}
 
 template <class Tkey, class Tvalue, size_t max_size, size_t block_size>
 size_t BlockList<Tkey, Tvalue, max_size, block_size>::FindPos(const std::pair<Tkey, Tvalue> &v) {
@@ -203,6 +217,21 @@ std::vector<Tvalue> BlockList<Tkey, Tvalue, max_size, block_size>::Find(const Tk
         }
         if (headlist_[i].head_.first > key) {
             break;
+        }
+    }
+    return res;
+}
+
+template <class Tkey, class Tvalue, size_t max_size, size_t block_size>
+std::vector<Tvalue> BlockList<Tkey, Tvalue, max_size, block_size>::FindAll() {
+    if (size_ == 0) {
+        return {};
+    } 
+    std::vector<Tvalue> res;
+    for (size_t i = 0; i < len_; i++) {
+        auto vec = BlockFindAll(headlist_[i]);
+        for (size_t i = 0; i < vec.size(); i++) {
+            res.push_back(vec[i]);
         }
     }
     return res;
