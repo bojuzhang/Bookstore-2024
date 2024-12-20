@@ -2,6 +2,7 @@
 #ifndef BOOK_HPP
 #define BOOK_HPP
 
+#include <cstddef>
 #include <iostream>
 #include <utility>
 #include <iomanip>
@@ -39,7 +40,19 @@ struct Book{
 // make the keyword to a vector of each keyword
 inline std::vector<string60> ReleaseKeywords(const string60 &keyword) {
     std::vector<string60> keywords;
-    // TODO
+    string60 tmp;
+    for (size_t i = 0; i < keyword.size(); i++) {
+        auto c = keyword[i];
+        if (c == '|') {
+            keywords.push_back(tmp);
+            tmp.clear();
+        } else {
+            tmp.push_back(c);
+        }
+    }
+    if (tmp.size() > 0) {
+        keywords.push_back(tmp);
+    }
     return keywords;
 };
 

@@ -18,7 +18,7 @@ public:
     MyVector() {size_ = 0;}
     MyVector(const T &);
     MyVector(const std::vector<T> &);
-    size_t size() {return size_;}
+    size_t size() const {return size_;}
     
     void push_back(const T &);
     size_t lower_bound(const T &);
@@ -28,6 +28,10 @@ public:
     const T& operator [] (size_t) const;
     T& back() {return a[size_ - 1];}
     const T& back() const {return a[size_ - 1];}
+    void clear() {
+        size_ = 0;
+    }
+    bool empty() const {return size_ == 0;}
 
     MyVector& operator = (const MyVector &other) {
         a = other.a;
