@@ -21,6 +21,25 @@ struct Book{
 
     Book() = delete;
     Book(int id_, const string20 &s) : id(id_), isbn(s) {};
+    Book(const Book &other) {
+        isbn = other.isbn;
+        bookname = other.bookname;
+        author = other.author;
+        keyword = other.keyword;
+        id = other.id;
+        rem = other.rem;
+        price = other.price;
+    }
+    Book& operator = (const Book &other) {
+        isbn = other.isbn;
+        bookname = other.bookname;
+        author = other.author;
+        keyword = other.keyword;
+        id = other.id;
+        rem = other.rem;
+        price = other.price;
+        return *this;
+    }
 
     bool operator < (const Book &) const;
     bool operator > (const Book &) const;

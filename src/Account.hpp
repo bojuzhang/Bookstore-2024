@@ -22,6 +22,21 @@ struct Account {
     Account() = delete;
     Account(const string30 &userid_, const string30 &username_, const string30 &password_, int priviledge_) :
     userid(userid_), username(username_), password(password_), priviledge(priviledge_) {}
+    Account(const Account &other) {
+        userid = other.userid;
+        username = other.username;
+        password = other.password;
+        priviledge = other.priviledge;
+        online_cnt = other.online_cnt;
+    }
+    Account& operator = (const Account &other) {
+        userid = other.userid;
+        username = other.username;
+        password = other.password;
+        priviledge = other.priviledge;
+        online_cnt = other.online_cnt;
+        return *this;
+    }
 };
 
 class AccountSystem {
