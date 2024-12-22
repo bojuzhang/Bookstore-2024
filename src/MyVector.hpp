@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <iostream>
 #include <ostream>
+#include <string>
 #ifndef MYVECTOR_HPP
 #define MYVECTOR_HPP
 
@@ -159,6 +160,12 @@ public:
             os << v.a[i];
         }
         return os;
+    }
+    friend std::istream& operator >> (std::istream &is, const MyString &v) {
+        std::string s;
+        is >> s;
+        v = MyString(s);
+        return is;
     }
 };
 
