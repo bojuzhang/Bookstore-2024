@@ -93,14 +93,18 @@ public:
     void ShowAll();
 
     void AddBook(const string20 &);
+    void BuyBook(int, int);
+    void ImportBook(int, int);
 
     void ModifyIsbn(int, const string20 &);
     void ModifyName(int, const string60 &);
     void ModifyAuthor(int, const string60 &);
     void ModifyKeyword(int, const string60 &);
+    void ModifyPrice(int, double);
 
     int FindId(const string20 &);
     Book FindBook(int);
+    bool CheckExist(const string20 &);
 private:
     BlockList<int, Book> idtobook_;
     BlockList<string20, int> isbntoid_;
@@ -270,9 +274,21 @@ inline void BookSystem::AddBook(const string20 &isbn) {
     authortoid_.Insert(std::make_pair(p.author, id));
     keywordtoid_.Insert(std::make_pair(p.keyword, id));
 }
+inline void BookSystem::BuyBook(int id, int num) {
+    auto p = FindBook(id);
+    idtobook_.Delete(std::make_pair(id, p));
+    p.rem -= num;
+    idtobook_.Insert(std::make_pair(id, p));
+}
+inline void BookSystem::ImportBook(int id, int num) {
+    auto p = FindBook(id);
+    idtobook_.Delete(std::make_pair(id, p));
+    p.rem += num;
+    idtobook_.Insert(std::make_pair(id, p));
+}
 
 inline void BookSystem::ModifyIsbn(int id, const string20 &isbn) {
-    auto p = idtobook_.Find(id)[0];
+    auto p = FindBook(id);
     isbntoid_.Delete(std::make_pair(p.isbn, id));
     idtobook_.Delete(std::make_pair(id, p));
     p.isbn = isbn;
@@ -280,7 +296,7 @@ inline void BookSystem::ModifyIsbn(int id, const string20 &isbn) {
     idtobook_.Insert(std::make_pair(id, p));
 }
 inline void BookSystem::ModifyName(int id, const string60 &bookname) {
-    auto p = idtobook_.Find(id)[0];
+    auto p = FindBook(id);
     booknametoid_.Delete(std::make_pair(p.bookname, id));
     idtobook_.Delete(std::make_pair(id, p));
     p.bookname = bookname;
@@ -288,7 +304,7 @@ inline void BookSystem::ModifyName(int id, const string60 &bookname) {
     idtobook_.Insert(std::make_pair(id, p));
 }
 inline void BookSystem::ModifyAuthor(int id, const string60 &author) {
-    auto p = idtobook_.Find(id)[0];
+    auto p = FindBook(id);
     authortoid_.Delete(std::make_pair(p.author, id));
     idtobook_.Delete(std::make_pair(id, p));
     p.author = author;
@@ -296,7 +312,7 @@ inline void BookSystem::ModifyAuthor(int id, const string60 &author) {
     idtobook_.Insert(std::make_pair(id, p));
 }
 inline void BookSystem::ModifyKeyword(int id, const string60 &keyword) {
-    auto p = idtobook_.Find(id)[0];
+    auto p = FindBook(id);
     auto keywords = ReleaseKeywords(p.keyword);
     for (const auto &x : keywords) {
         keywordtoid_.Delete(std::make_pair(x, id));
@@ -309,12 +325,21 @@ inline void BookSystem::ModifyKeyword(int id, const string60 &keyword) {
     }
     idtobook_.Insert(std::make_pair(id, p));
 }
+inline void BookSystem::ModifyPrice(int id, double price) {
+    auto p = FindBook(id);
+    idtobook_.Delete(std::make_pair(id, p));
+    p.price = price;
+    idtobook_.Insert(std::make_pair(id, p));
+}
 
 inline Book BookSystem::FindBook(int id) {
     return idtobook_.Find(id)[0];
 }
 inline int BookSystem::FindId(const string20 &isbn) {
     return isbntoid_.Find(isbn)[0];
+}
+inline bool BookSystem::CheckExist(const string20 &isbn) {
+    return !isbntoid_.Find(isbn).empty();
 }
 
 #endif

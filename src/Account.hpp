@@ -161,6 +161,9 @@ inline int AccountSystem::NowSelect() {
     return stackaccount_.back().second;
 }
 inline int AccountSystem::NowPriviledge() {
+    if (stackaccount_.empty()) {
+        return 0;
+    }
     return stackaccount_.back().first.priviledge;
 }
 

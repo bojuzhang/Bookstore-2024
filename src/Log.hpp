@@ -92,6 +92,10 @@ inline int LogSystem::FinanceCount() {
     return history_count_;
 }
 inline void LogSystem::PrintFinance(int count) {
+    if (!count) {
+        std::cout << "\n";
+        return;
+    }
     std::pair<double, double> now, p;
     finance_log_.read(now, history_count_ - 1);
     if (count < history_count_) {

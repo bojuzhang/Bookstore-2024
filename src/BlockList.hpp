@@ -100,9 +100,9 @@ void BlockList<Tkey, Tvalue, max_size, block_size>::BlockInsert
         HeadNode p = {R[0], R.back(), R.size(), pos};
         cur = {L[0], L.back(), L.size(), cur.pos_};
         headlist_.insert(headnodepos + 1, p);
-        BlockNode p1, p2;
-        nodememory_.read(p1, headlist_[headnodepos].pos_);
-        nodememory_.read(p2, headlist_[headnodepos + 1].pos_);
+        // BlockNode p1, p2;
+        // nodememory_.read(p1, headlist_[headnodepos].pos_);
+        // nodememory_.read(p2, headlist_[headnodepos + 1].pos_);
         ++len_;
     } else {
         nodememory_.update(vec, cur.pos_);
