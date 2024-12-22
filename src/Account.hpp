@@ -50,6 +50,8 @@ public:
     void DeleteAccount(const Account &);
     void Select(int);
     int NowSelect();
+    int NowPriviledge();
+    bool CheckExist(const string30 &);
 
     bool empty() { return stackaccount_.empty(); }
     size_t size() { return stackaccount_.size(); }
@@ -158,5 +160,13 @@ inline void AccountSystem::Select(int id) {
 inline int AccountSystem::NowSelect() {
     return stackaccount_.back().second;
 }
+inline int AccountSystem::NowPriviledge() {
+    return stackaccount_.back().first.priviledge;
+}
+
+inline bool AccountSystem::CheckExist(const string30 &userid) {
+    return !accountfile_.Find(userid).empty();
+}
+
 
 #endif
