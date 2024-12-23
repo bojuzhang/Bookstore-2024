@@ -10,7 +10,7 @@
 struct Account {
     string30 userid, username, password;
     int priviledge;
-    int online_cnt;
+    int online_cnt = 0;
 
     bool operator < (const Account &) const;
     bool operator > (const Account &) const;
@@ -42,7 +42,12 @@ struct Account {
 
 class AccountSystem {
 public:
-    AccountSystem() : accountfile_("userid_to_account") {};
+    AccountSystem() : accountfile_("userid_to_account") {
+        if (accountfile_.Find(string30("root")).empty()) {
+            accountfile_.Insert(std::make_pair(string30("root"), 
+            Account(string30("root"), string30("root"), string30("sjtu"), 7)));
+        }
+    }
     bool CheckPassword(const string30 &, const string30 &);
     void Login(const string30 &);
     void Logout();
