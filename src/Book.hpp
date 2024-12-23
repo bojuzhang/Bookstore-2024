@@ -82,6 +82,7 @@ public:
     isbntoid_("isbn_to_id"), authortoid_("author_to_id"), 
     booknametoid_("bookname_to_id"), keywordtoid_("keyword_to_id") {
         cnt_book_ = idtobook_.size();
+        idx_ = idtobook_.queryadded();
     }
 
     std::vector<Book> QueryIsbn(const string20 &);
@@ -113,6 +114,7 @@ private:
     BlockList<string20, int> isbntoid_;
     BlockList<string60, int> authortoid_, booknametoid_, keywordtoid_;
     int cnt_book_;
+    int idx_;
 };
 
 inline bool Book::operator < (const Book &other) const {
@@ -239,37 +241,70 @@ inline std::vector<Book> BookSystem::QueryAll() {
 }
 inline void BookSystem::ShowIsbn(const string20 &isbn) {
     auto res = QueryIsbn(isbn);
+    stable_sort(res.begin(), res.end(), [&](auto a, auto b) {
+        return a.isbn < b.isbn;
+    });
+    if (!res.size()) {
+        std::cout << "\n";
+    }
     for (const auto &p : res) {
+        std::cerr << "testasshfsdhf " << p << "\n";
         std::cout << p;
     }
 }
 inline void BookSystem::ShowAuthor(const string60 &author) {
     auto res = QueryAuthor(author);
+    stable_sort(res.begin(), res.end(), [&](auto a, auto b) {
+        return a.isbn < b.isbn;
+    });
+    if (!res.size()) {
+        std::cout << "\n";
+    }
     for (const auto &p : res) {
         std::cout << p;
     }
 }
 inline void BookSystem::ShowName(const string60 &bookname) {
     auto res = QueryName(bookname);
+    stable_sort(res.begin(), res.end(), [&](auto a, auto b) {
+        return a.isbn < b.isbn;
+    });
+    if (!res.size()) {
+        std::cout << "\n";
+    }
     for (const auto &p : res) {
         std::cout << p;
     }
 }
 inline void BookSystem::ShowKeyword(const string60 &keyword) {
     auto res = QueryKeyword(keyword);
+    stable_sort(res.begin(), res.end(), [&](auto a, auto b) {
+        return a.isbn < b.isbn;
+    });
+    if (!res.size()) {
+        std::cout << "\n";
+    }
     for (const auto &p : res) {
         std::cout << p;
     }
 }
 inline void BookSystem::ShowAll() {
     auto res = QueryAll();
+    stable_sort(res.begin(), res.end(), [&](auto a, auto b) {
+        return a.isbn < b.isbn;
+    });
+    if (!res.size()) {
+        std::cout << "\n";
+    }
     for (const auto &p : res) {
         std::cout << p;
     }
 }
 
 inline void BookSystem::AddBook(const string20 &isbn) {
-    int id = idtobook_.backkey();
+    int id = idtobook_.queryadded() + 1;
+    idtobook_.modifyadded(id);
+    std::cerr << "testid: !!! : " << id << "\n";
     cnt_book_++;
     Book p(id, isbn);
     idtobook_.Insert(std::make_pair(id, p));
@@ -293,11 +328,15 @@ inline void BookSystem::ImportBook(int id, int num) {
 
 inline void BookSystem::ModifyIsbn(int id, const string20 &isbn) {
     auto p = FindBook(id);
+    std::cerr << "tets " << p.isbn << " " << isbn << "\n";
     isbntoid_.Delete(std::make_pair(p.isbn, id));
     idtobook_.Delete(std::make_pair(id, p));
     p.isbn = isbn;
     isbntoid_.Insert(std::make_pair(p.isbn, id));
     idtobook_.Insert(std::make_pair(id, p));
+    std::cerr << CheckExist(isbn) << "\n";
+    auto tmp = QueryIsbn(isbn)[0];
+    std::cerr << "testmodifysucc " << tmp << "\n";
 }
 inline void BookSystem::ModifyName(int id, const string60 &bookname) {
     auto p = FindBook(id);
@@ -306,6 +345,7 @@ inline void BookSystem::ModifyName(int id, const string60 &bookname) {
     p.bookname = bookname;
     booknametoid_.Insert(std::make_pair(p.bookname, id));
     idtobook_.Insert(std::make_pair(id, p));
+    std::cerr << "testmodifysucc " << QueryName(bookname)[0];
 }
 inline void BookSystem::ModifyAuthor(int id, const string60 &author) {
     auto p = FindBook(id);

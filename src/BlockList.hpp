@@ -31,6 +31,8 @@ private:
 
     size_t size_, len_;
 
+    int added_info;
+
 public:
     BlockList() = delete;
     BlockList(const std::string &);
@@ -49,9 +51,10 @@ public:
     std::vector<Tvalue> Find(const Tkey &);
     std::vector<Tvalue> FindAll();
     size_t size() {return size_;}
-    Tkey backkey() {
-        return headlist_.back().end_.first;
+    void modifyadded(int x) {
+        added_info = x;
     }
+    int queryadded() {return added_info;}
 };
 
 template <class Tkey, class Tvalue, size_t max_size, size_t block_size>
@@ -63,6 +66,7 @@ BlockList<Tkey, Tvalue, max_size, block_size>::BlockList(const std::string &file
     headmemory_.get_info(t, 2);
     size_ = t;
     headmemory_.get_info(t, 1);
+    nodememory_.get_info(added_info, 4);
     if (t != 0) {
         headmemory_.read(headlist_, 0);
         len_ = headlist_.size();
@@ -74,6 +78,7 @@ BlockList<Tkey, Tvalue, max_size, block_size>::~BlockList() {
     headmemory_.write_info(size_, 2);
     headmemory_.write_info(headlist_[0].pos_, 3);
     headmemory_.write_info(len_, 4);
+    nodememory_.write_info(added_info, 4);
     int t = 0;
     headmemory_.get_info(t, 1);
     if (t == 0) {

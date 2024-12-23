@@ -74,6 +74,11 @@ inline std::array<std::string, 2> Format::ReleaseToken(std::string s) {
         ans[1] += s[i];
         i++;
     }
+    if (ans[1].size() && ans[1][0] == '\"' && ans[1].back() == '\"') {
+        ans[1].erase(0, 1);
+        ans[1].pop_back();
+    }
+    std::cerr << "releasetoken " << ans[0] << " " << ans[1] << "\n";
     return ans;
 }
 
@@ -221,30 +226,32 @@ inline void Format::Show() {
     } else {
         auto t = ReleaseToken(p[0]);
         auto op = t[0], str = t[1];
+        std::cerr << "testshow " << op << " " << str << "\n";
         if (op == "ISBN") {
             if (str.size() > 20 || str.empty()) {
                 std::cout << "Invalid\n";
                 return;
             }
+            std::cerr << "test showisbn:" << str << "\n";
             operator_.Show(ShowOperator::ISBN, string60(""), string20(str));
         } else if (op == "name") {
             if (str.size() > 60 || str.empty()) {
                 std::cout << "Invalid\n";
                 return;
             }
-            operator_.Show(ShowOperator::BOOKNAME, string60(p[0]), string20(""));
+            operator_.Show(ShowOperator::BOOKNAME, string60(str), string20(""));
         } else if (op == "author") {
             if (str.size() > 60 || str.empty()) {
                 std::cout << "Invalid\n";
                 return;
             }
-            operator_.Show(ShowOperator::AUTHOR, string60(p[0]), string20(""));
+            operator_.Show(ShowOperator::AUTHOR, string60(str), string20(""));
         } else if (op == "keyword") {
             if (str.size() > 60 || str.empty() || str.find('|') != str.npos) {
                 std::cout << "Invalid\n";
                 return;
             }
-            operator_.Show(ShowOperator::KEYWORD, string60(p[0]), string20(""));
+            operator_.Show(ShowOperator::KEYWORD, string60(str), string20(""));
         } else {
             std::cout << "Invalid\n";
             return;
@@ -271,7 +278,6 @@ inline void Format::BuyBook() {
 }
 inline void Format::Select() {
     auto p =GetToken();
-    std::cerr << p.size() << "\n";
     if (p.size() != 1) {
         std::cout << "Invalid\n";
         return;
@@ -281,7 +287,6 @@ inline void Format::Select() {
         return;
     }
     operator_.Select(string20(p[0]));
-    std::cerr << "selectsucc\n";
 }
 inline void Format::Modify() {
     auto p = GetToken();
@@ -303,6 +308,7 @@ inline void Format::Modify() {
             }
             ops.push_back(ModifyOperator::ISBN);
             isbn = string20(str);
+            // std::cerr << "test isbn " << isbn << "\n";
         } else if (op == "name") {
             if (str.size() > 60 || str.empty()) {
                 std::cout << "Invalid\n";
@@ -310,6 +316,7 @@ inline void Format::Modify() {
             }
             ops.push_back(ModifyOperator::BOOKNAME);
             others.push_back(string60(str));
+            // std::cerr << "test name " << others.back() << "\n";
         } else if (op == "author") {
             if (str.size() > 60 || str.empty()) {
                 std::cout << "Invalid\n";
@@ -317,6 +324,7 @@ inline void Format::Modify() {
             }
             ops.push_back(ModifyOperator::AUTHOR);
             others.push_back(string60(str));
+            // std::cerr << "test author " << others.back() << "\n";
         } else if (op == "keyword") {
             if (str.size() > 60 || str.empty()) {
                 std::cout << "Invalid\n";
@@ -324,6 +332,7 @@ inline void Format::Modify() {
             }
             ops.push_back(ModifyOperator::KEYWORD);
             others.push_back(string60(str));
+            // std::cerr << "test keyword " << others.back() << "\n";
         } else if (op == "price") {
             if (str.size() > 13 || str.empty()) {
                 std::cout << "Invalid\n";
@@ -337,6 +346,7 @@ inline void Format::Modify() {
                 }
             }
             price = std::stod(str);
+            // std::cerr << "test price " << price << "\n";
         } else {
             std::cout << "Invalid\n";
             return;
