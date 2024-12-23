@@ -1,8 +1,7 @@
 #pragma once
-#include <cassert>
-#include <cstddef>
 #ifndef FORMAT_HPP
 #define FORMAT_HPP
+#include <cstddef>
 #include <array>
 #include "MyVector.hpp"
 #include "Operator.hpp"

@@ -49,6 +49,9 @@ public:
     std::vector<Tvalue> Find(const Tkey &);
     std::vector<Tvalue> FindAll();
     size_t size() {return size_;}
+    Tkey backkey() {
+        return headlist_.back().end_.first;
+    }
 };
 
 template <class Tkey, class Tvalue, size_t max_size, size_t block_size>

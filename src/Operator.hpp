@@ -1,12 +1,12 @@
 #pragma once
+#ifndef OPERATOR_HPP
+#define OPERATOR_HPP
 #include "Account.hpp"
 #include "Book.hpp"
 #include "Log.hpp"
 #include "MyVector.hpp"
 #include <iostream>
 #include <vector>
-#ifndef OPERATOR_HPP
-#define OPERATOR_HPP
 
 enum class ShowOperator {ISBN, BOOKNAME, AUTHOR, KEYWORD, ALL};
 enum class ModifyOperator {ISBN, BOOKNAME, AUTHOR, KEYWORD, PRICE};

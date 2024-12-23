@@ -79,7 +79,9 @@ class BookSystem {
 public:
     BookSystem() : idtobook_("id_to_book"), 
     isbntoid_("isbn_to_id"), authortoid_("author_to_id"), 
-    booknametoid_("bookname_to_id"), keywordtoid_("keyword_to_id") {}
+    booknametoid_("bookname_to_id"), keywordtoid_("keyword_to_id") {
+        cnt_book_ = idtobook_.size();
+    }
 
     std::vector<Book> QueryIsbn(const string20 &);
     std::vector<Book> QueryName(const string60 &);
@@ -266,7 +268,8 @@ inline void BookSystem::ShowAll() {
 }
 
 inline void BookSystem::AddBook(const string20 &isbn) {
-    int id = ++cnt_book_;
+    int id = idtobook_.backkey();
+    cnt_book_++;
     Book p(id, isbn);
     idtobook_.Insert(std::make_pair(id, p));
     isbntoid_.Insert(std::make_pair(isbn, id));
