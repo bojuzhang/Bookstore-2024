@@ -103,6 +103,12 @@ inline void Format::run() {
             DeleteUser();
         } else if (op == "show") {
             Show();
+        } else if (op == "select") {
+            Select();
+        } else if (op == "modify") {
+            Modify();
+        } else if (op == "import") {
+            Import();
         } else if (op == "log") {
             Log();
         } else if (op == "report") {
@@ -265,6 +271,7 @@ inline void Format::BuyBook() {
 }
 inline void Format::Select() {
     auto p =GetToken();
+    std::cerr << p.size() << "\n";
     if (p.size() != 1) {
         std::cout << "Invalid\n";
         return;
@@ -274,6 +281,7 @@ inline void Format::Select() {
         return;
     }
     operator_.Select(string20(p[0]));
+    std::cerr << "selectsucc\n";
 }
 inline void Format::Modify() {
     auto p = GetToken();
