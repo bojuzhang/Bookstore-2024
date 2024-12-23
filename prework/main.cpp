@@ -34,16 +34,4 @@ int main(int argc, const char *argv[]) {
             T.Delete(std::make_pair(s, value));
         }
     }
-
-
-    // using node = MyVector<int, 100>;
-    // MemoryRiver<node> a("123456");
-    // a.initialise();
-    // std::cerr << "fdsfhjsd: " << sizeof(node) << "\n";
-    // node ve(std::vector<int>(5, GetHash("114!!!")));
-    // a.write(ve);
-    // ve.print();
-    // node p;
-    // a.read(p, 0);
-    // p.print();
 }
