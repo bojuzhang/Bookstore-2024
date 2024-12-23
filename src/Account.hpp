@@ -19,7 +19,8 @@ struct Account {
     bool operator >= (const Account &) const;
     bool operator != (const Account &) const;
 
-    Account() = delete;
+    // Account() = delete;
+    Account() {};
     Account(const string30 &userid_, const string30 &username_, const string30 &password_, int priviledge_) :
     userid(userid_), username(username_), password(password_), priviledge(priviledge_) {}
     Account(const Account &other) {

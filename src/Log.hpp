@@ -33,7 +33,9 @@ public:
     virtual bool operator >= (const LogBase &) const;
     virtual bool operator != (const LogBase &) const;
 
-    virtual void Print();
+    virtual void Print() {
+        std::cout << userid_ << " " << time_ << "\n";
+    }
     virtual int Time() { return time_; }
     virtual string30 Userid() { return userid_; }
 };

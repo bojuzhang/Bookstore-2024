@@ -19,7 +19,8 @@ struct Book{
     int rem{};
     double price{};
 
-    Book() = delete;
+    // Book() = delete;
+    Book() {};
     Book(int id_, const string20 &s) : id(id_), isbn(s) {};
     Book(const Book &other) {
         isbn = other.isbn;

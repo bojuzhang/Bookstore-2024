@@ -37,6 +37,7 @@ public:
     MyVector& operator = (const MyVector &other) {
         a = other.a;
         size_ = other.size_;
+        return *this;
     }
     MyVector(const MyVector &other) {
         a = other.a;
