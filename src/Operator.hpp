@@ -20,7 +20,7 @@ private:
     LogSystem logsystem_;
     bool CheckPriviledge(int priviledge) {
         if (accountsystem_.NowPriviledge() < priviledge) {
-            std::cout << "Invalid\n";
+            // std::cout << "Invalid\n";
             return false;
         }
         return true;
@@ -212,7 +212,8 @@ inline void Operator::Modify
         std::cout << "Invalid\n";
         return;
     }
-    if (!isbn.empty() && isbn == booksystem_.FindBook(id).isbn) {
+    if (!isbn.empty() && booksystem_.CheckExist(isbn)) {
+        std::cerr << "exist isbn\n";
         std::cout << "Invalid\n";
         return;
     }
