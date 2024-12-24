@@ -106,7 +106,7 @@ inline void LogSystem::PrintFinance(int count) {
         p = {0.0, 0.0};
     }
     std::cout << std::fixed << std::setprecision(2)
-    << "+ " << now.first - p.first << " - " << now.second - p.second << "\n";
+    << "+ " << now.first - p.first << " - " << std::abs(now.second - p.second) << "\n";
 }
 
 #endif

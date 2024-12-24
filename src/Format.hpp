@@ -25,13 +25,12 @@ private:
     void DeleteUser();
     void LogoutAll();
 
-    void Show();
+    void Show();// Show Book & Show Finance
     void BuyBook();
     void Select();
     void Modify();
     void Import();
 
-    void ShowFinance();
     // TODO: WHOLE LOG
     void Log();
     void ReportFinance();
@@ -222,15 +221,20 @@ inline void Format::DeleteUser() {
     operator_.DeleteUser(string30(p[0]));
 }
 
+// Show book & Show finance
 inline void Format::Show() {
     auto p = GetToken();
-    if (p.size() > 1) {
+    if (p.size() > 2) {
         std::cout << "Invalid\n";
         return;
     }
     if (p.size() == 0) {
         operator_.Show(ShowOperator::ALL, string60(""), string20(""));
-    } else {
+    } else if (p.size() == 1) {
+        if (p[0] == "finance") {
+            operator_.ShowFinance(1, 1);
+            return;
+        }
         auto t = ReleaseToken(p[0]);
         auto op = t[0], str = t[1];
         if (op == "ISBN") {
@@ -261,6 +265,22 @@ inline void Format::Show() {
             std::cout << "Invalid\n";
             return;
         }
+    } else {
+        if (p[0] != "finance") {
+            std::cout << "Invalid\n";
+            return;
+        }
+        if (p[1].size() > 10) {
+            std::cout << "Invalid\n";
+            return;
+        }
+        for (auto c : p[1]) {
+            if (!isdigit(c)) {
+                std::cout << "Invalid\n";
+                return;
+            }
+        }
+        operator_.ShowFinance(std::stoi(p[1]), 0);
     }
 }
 inline void Format::BuyBook() {
@@ -392,28 +412,6 @@ inline void Format::Import() {
     operator_.Import(std::stoi(p[0]), std::stod(p[1]));
 }
 
-inline void Format::ShowFinance() {
-    auto p = GetToken();
-    if (p.size() > 1) {
-        std::cout << "Invalid\n";
-        return;
-    }
-    if (p.empty()) {
-        operator_.ShowFinance(1, 1);
-    } else {
-        if (p[0].size() > 10) {
-            std::cout << "Invalid\n";
-            return;
-        }
-        for (auto c : p[0]) {
-            if (!isdigit(c)) {
-                std::cout << "Invalid\n";
-                return;
-            }
-        }
-        operator_.ShowFinance(std::stoi(p[0]), 0);
-    }
-}
 // TODO: WHOLE LOG
 inline void Format::Log() {
 
