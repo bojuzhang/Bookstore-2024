@@ -1,4 +1,6 @@
 #pragma once
+#include <iomanip>
+#include <ios>
 #ifndef OPERATOR_HPP
 #define OPERATOR_HPP
 #include "Account.hpp"
@@ -26,6 +28,7 @@ private:
 public:
     void Login(const string30 &, const string30 &);
     void Logout();
+    void LogoutAll();
     void Register(const string30 &, const string30 &, const string30 &);
     void ModifyPassword(const string30 &, const string30 &, const string30 &);
     void AddUser(const string30 &, const string30 &, int, const string30 &);
@@ -63,11 +66,16 @@ inline void Operator::Login(const string30 &userid, const string30 &password) {
 }
 inline void Operator::Logout() {
     if (!CheckPriviledge(1)) return;
-    if (!accountsystem_.size()) {
+    if (accountsystem_.size() <= 0) {
         std::cout << "Invalid\n";
         return;
     }
     accountsystem_.Logout();
+}
+inline void Operator::LogoutAll() {
+    while (accountsystem_.size()) {
+        accountsystem_.Logout();
+    }
 }
 inline void Operator::Register(const string30 &userid, const string30 &password, const string30 &username) {
     if (!CheckPriviledge(0)) return;
@@ -116,6 +124,7 @@ inline void Operator::DeleteUser(const string30 &userid) {
         return;
     }
     auto user = accountsystem_.FindAccount(userid);
+    // std::cerr << user.online_cnt << "\n";
     if (user.online_cnt > 0) {
         std::cout << "Invalid\n";
         return;
@@ -154,6 +163,7 @@ inline void Operator::BuyBook(const string20 &isbn, int num) {
     }
     booksystem_.BuyBook(id, num);
     logsystem_.AddFinance(book.price * num, 1);
+    std::cout << std::fixed << std::setprecision(2) << book.price * num << "\n";
 }
 inline void Operator::Select(const string20 &isbn) {
     if (!CheckPriviledge(3)) return;

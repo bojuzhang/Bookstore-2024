@@ -22,6 +22,7 @@ private:
     void ModifyPassword();
     void AddUser();
     void DeleteUser();
+    void LogoutAll();
 
     void Show();
     void BuyBook();
@@ -78,17 +79,20 @@ inline std::array<std::string, 2> Format::ReleaseToken(std::string s) {
         ans[1].erase(0, 1);
         ans[1].pop_back();
     }
-    std::cerr << "releasetoken " << ans[0] << " " << ans[1] << "\n";
     return ans;
 }
 
+inline void Format::LogoutAll() {
+    operator_.LogoutAll();
+}
+
 inline void Format::run() {
-    while (1) {
-        std::string op;
-        std::cin >> op;
+    std::string op;
+    while (std::cin >> op) {
         if (op == "quit" || op == "exit") {
             auto p = GetToken();
             if (p.empty()) {
+                LogoutAll();
                 break; 
             } else {
                 std::cout << "Invalid\n";
@@ -108,6 +112,8 @@ inline void Format::run() {
             DeleteUser();
         } else if (op == "show") {
             Show();
+        } else if (op == "buy") {
+            BuyBook();
         } else if (op == "select") {
             Select();
         } else if (op == "modify") {
@@ -226,13 +232,11 @@ inline void Format::Show() {
     } else {
         auto t = ReleaseToken(p[0]);
         auto op = t[0], str = t[1];
-        std::cerr << "testshow " << op << " " << str << "\n";
         if (op == "ISBN") {
             if (str.size() > 20 || str.empty()) {
                 std::cout << "Invalid\n";
                 return;
             }
-            std::cerr << "test showisbn:" << str << "\n";
             operator_.Show(ShowOperator::ISBN, string60(""), string20(str));
         } else if (op == "name") {
             if (str.size() > 60 || str.empty()) {
@@ -274,6 +278,11 @@ inline void Format::BuyBook() {
             return;
         }
     }
+    int num = std::stoi(p[1]);
+    if (num <= 0) {
+        std::cout << "Invalid\n";
+        return;
+    }
     operator_.BuyBook(string20(p[0]), std::stoi(p[1]));
 }
 inline void Format::Select() {
@@ -308,7 +317,6 @@ inline void Format::Modify() {
             }
             ops.push_back(ModifyOperator::ISBN);
             isbn = string20(str);
-            // std::cerr << "test isbn " << isbn << "\n";
         } else if (op == "name") {
             if (str.size() > 60 || str.empty()) {
                 std::cout << "Invalid\n";
@@ -316,7 +324,6 @@ inline void Format::Modify() {
             }
             ops.push_back(ModifyOperator::BOOKNAME);
             others.push_back(string60(str));
-            // std::cerr << "test name " << others.back() << "\n";
         } else if (op == "author") {
             if (str.size() > 60 || str.empty()) {
                 std::cout << "Invalid\n";
@@ -324,7 +331,6 @@ inline void Format::Modify() {
             }
             ops.push_back(ModifyOperator::AUTHOR);
             others.push_back(string60(str));
-            // std::cerr << "test author " << others.back() << "\n";
         } else if (op == "keyword") {
             if (str.size() > 60 || str.empty()) {
                 std::cout << "Invalid\n";
@@ -332,7 +338,6 @@ inline void Format::Modify() {
             }
             ops.push_back(ModifyOperator::KEYWORD);
             others.push_back(string60(str));
-            // std::cerr << "test keyword " << others.back() << "\n";
         } else if (op == "price") {
             if (str.size() > 13 || str.empty()) {
                 std::cout << "Invalid\n";
@@ -346,7 +351,6 @@ inline void Format::Modify() {
                 }
             }
             price = std::stod(str);
-            // std::cerr << "test price " << price << "\n";
         } else {
             std::cout << "Invalid\n";
             return;

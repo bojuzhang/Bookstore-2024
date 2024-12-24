@@ -248,7 +248,6 @@ inline void BookSystem::ShowIsbn(const string20 &isbn) {
         std::cout << "\n";
     }
     for (const auto &p : res) {
-        std::cerr << "testasshfsdhf " << p << "\n";
         std::cout << p;
     }
 }
@@ -328,15 +327,11 @@ inline void BookSystem::ImportBook(int id, int num) {
 
 inline void BookSystem::ModifyIsbn(int id, const string20 &isbn) {
     auto p = FindBook(id);
-    std::cerr << "tets " << p.isbn << " " << isbn << "\n";
     isbntoid_.Delete(std::make_pair(p.isbn, id));
     idtobook_.Delete(std::make_pair(id, p));
     p.isbn = isbn;
     isbntoid_.Insert(std::make_pair(p.isbn, id));
     idtobook_.Insert(std::make_pair(id, p));
-    std::cerr << CheckExist(isbn) << "\n";
-    auto tmp = QueryIsbn(isbn)[0];
-    std::cerr << "testmodifysucc " << tmp << "\n";
 }
 inline void BookSystem::ModifyName(int id, const string60 &bookname) {
     auto p = FindBook(id);
@@ -345,7 +340,6 @@ inline void BookSystem::ModifyName(int id, const string60 &bookname) {
     p.bookname = bookname;
     booknametoid_.Insert(std::make_pair(p.bookname, id));
     idtobook_.Insert(std::make_pair(id, p));
-    std::cerr << "testmodifysucc " << QueryName(bookname)[0];
 }
 inline void BookSystem::ModifyAuthor(int id, const string60 &author) {
     auto p = FindBook(id);

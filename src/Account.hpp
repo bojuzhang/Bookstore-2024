@@ -141,10 +141,18 @@ inline bool AccountSystem::CheckPassword(const string30 &userid, const string30 
 }
 inline void AccountSystem::Login(const string30 &userid) {
     auto p = FindAccount(userid);
+    accountfile_.Delete(std::make_pair(userid, p));
+    p.online_cnt++;
+    accountfile_.Insert(std::make_pair(userid, p));
     stackaccount_.push_back(std::make_pair(p, -1));
 }
 inline void AccountSystem::Logout() {
+    auto userid = stackaccount_.back().first.userid;
     stackaccount_.pop_back();
+    auto p = accountfile_.Find(userid)[0];
+    accountfile_.Delete(std::make_pair(userid, p));
+    p.online_cnt--;
+    accountfile_.Insert(std::make_pair(userid, p));
 }
 inline void AccountSystem::ModifyPassword(const string30 &userid, const string30 &new_password) {
     auto p = FindAccount(userid);
