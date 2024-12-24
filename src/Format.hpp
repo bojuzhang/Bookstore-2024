@@ -1,4 +1,5 @@
 #pragma once
+#include "Book.hpp"
 #ifndef FORMAT_HPP
 #define FORMAT_HPP
 #include <cstddef>
@@ -337,6 +338,14 @@ inline void Format::Modify() {
                 return;
             }
             ops.push_back(ModifyOperator::KEYWORD);
+            auto ve = ReleaseKeywords(str);
+            sort(ve.begin(), ve.end());
+            for (size_t i = 1; i < ve.size(); i++) {
+                if (ve[i - 1] == ve[i]) {
+                    std::cout << "Invalid\n";
+                    return;
+                }
+            }
             others.push_back(string60(str));
         } else if (op == "price") {
             if (str.size() > 13 || str.empty()) {
