@@ -48,7 +48,10 @@ public:
 };
 
 inline void Operator::Login(const string30 &userid, const string30 &password) {
-    if (!CheckPriviledge(0)) return;
+    if (!CheckPriviledge(0))  {
+        std::cout << "Invalid\n";
+        return;
+    }
     if (!accountsystem_.CheckExist(userid)) {
         std::cout << "Invalid\n";
         return;
@@ -65,7 +68,10 @@ inline void Operator::Login(const string30 &userid, const string30 &password) {
     accountsystem_.Login(userid);
 }
 inline void Operator::Logout() {
-    if (!CheckPriviledge(1)) return;
+    if (!CheckPriviledge(1)) {
+        std::cout << "Invalid\n";
+        return;
+    }
     if (accountsystem_.size() <= 0) {
         std::cout << "Invalid\n";
         return;
@@ -78,7 +84,10 @@ inline void Operator::LogoutAll() {
     }
 }
 inline void Operator::Register(const string30 &userid, const string30 &password, const string30 &username) {
-    if (!CheckPriviledge(0)) return;
+    if (!CheckPriviledge(0)) {
+        std::cout << "Invalid\n";
+        return;
+    }
     if (accountsystem_.CheckExist(userid)) {
         std::cout << "Invalid\n";
         return;
@@ -87,7 +96,10 @@ inline void Operator::Register(const string30 &userid, const string30 &password,
 }
 inline void Operator::ModifyPassword
 (const string30 &userid, const string30 &currentpassword, const string30 &newpassword) {
-    if (!CheckPriviledge(1)) return;
+    if (!CheckPriviledge(1)) {
+        std::cout << "Invalid\n";
+        return;
+    }
     if (!accountsystem_.CheckExist(userid)) {
         std::cout << "Invalid\n";
         return;
@@ -106,7 +118,10 @@ inline void Operator::ModifyPassword
 }
 inline void Operator::AddUser
 (const string30 &userid, const string30 &password, int priviledge, const string30 &username) {
-    if (!CheckPriviledge(3)) return;
+    if (!CheckPriviledge(3)) {
+        std::cout << "Invalid\n";
+        return;
+    }
     if (priviledge >= accountsystem_.NowPriviledge()) {
         std::cout << "Invalid\n";
         return;
@@ -118,7 +133,10 @@ inline void Operator::AddUser
     accountsystem_.AddAccount(userid, username, password, priviledge);
 }
 inline void Operator::DeleteUser(const string30 &userid) {
-    if (!CheckPriviledge(7)) return;
+    if (!CheckPriviledge(7)) {
+        std::cout << "Invalid\n";
+        return;
+    }
     if (!accountsystem_.CheckExist(userid)) {
         std::cout << "Invalid\n";
         return;
@@ -133,7 +151,10 @@ inline void Operator::DeleteUser(const string30 &userid) {
 }
 
 inline void Operator::Show(ShowOperator op, const string60 &other, const string20 &isbn) {
-    if (!CheckPriviledge(1)) return;
+    if (!CheckPriviledge(1)) {
+        std::cout << "Invalid\n";
+        return;
+    }
     if (op == ShowOperator::ISBN) {
         booksystem_.ShowIsbn(isbn);
     } else if (op == ShowOperator::AUTHOR) {
@@ -150,7 +171,10 @@ inline void Operator::Show(ShowOperator op, const string60 &other, const string2
     }
 }
 inline void Operator::BuyBook(const string20 &isbn, int num) {
-    if (!CheckPriviledge(1)) return;
+    if (!CheckPriviledge(1)) {
+        std::cout << "Invalid\n";
+        return;
+    }
     if (!booksystem_.CheckExist(isbn)) {
         std::cout << "Invalid\n";
         return;
@@ -166,7 +190,10 @@ inline void Operator::BuyBook(const string20 &isbn, int num) {
     std::cout << std::fixed << std::setprecision(2) << book.price * num << "\n";
 }
 inline void Operator::Select(const string20 &isbn) {
-    if (!CheckPriviledge(3)) return;
+    if (!CheckPriviledge(3)) {
+        std::cout << "Invalid\n";
+        return;
+    }
     if (!booksystem_.CheckExist(isbn)) {
         booksystem_.AddBook(isbn);
     }
@@ -176,7 +203,10 @@ inline void Operator::Select(const string20 &isbn) {
 inline void Operator::Modify
 (const std::vector<ModifyOperator> &ops, const std::vector<string60> &others, 
  const string20 &isbn, double price) {
-    if (!CheckPriviledge(3)) return;
+    if (!CheckPriviledge(3)) {
+        std::cout << "Invalid\n";
+        return;
+    }
     int id = accountsystem_.NowSelect();
     if (id == -1) {
         std::cout << "Invalid\n";
@@ -202,7 +232,10 @@ inline void Operator::Modify
     }
 }
 inline void Operator::Import(int num, double cost) {
-    if (!CheckPriviledge(3)) return;
+    if (!CheckPriviledge(3)) {
+        std::cout << "Invalid\n";
+        return;
+    }
     int id = accountsystem_.NowSelect();
     if (id == -1) {
         std::cout << "Invalid\n";
@@ -213,7 +246,10 @@ inline void Operator::Import(int num, double cost) {
 }
 
 inline void Operator::ShowFinance(int count, bool is_all) {
-    if (!CheckPriviledge(7)) return;
+    if (!CheckPriviledge(7)) {
+        std::cout << "Invalid\n";
+        return;
+    }
     if (is_all) {
         logsystem_.PrintFinance(logsystem_.FinanceCount());
     } else {
