@@ -195,7 +195,7 @@ inline void Format::ModifyPassword() {
             return;
         }
     }
-    operator_.ModifyPassword(string30(p[0]), string30(p.size() == 3 ? p[2] : ""), string30(p.back()));
+    operator_.ModifyPassword(string30(p[0]), string30(p.size() == 3 ? p[1] : ""), string30(p.back()));
 }
 inline void Format::AddUser() {
     auto p = GetToken();
