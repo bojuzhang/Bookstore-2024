@@ -53,15 +53,18 @@ inline void Operator::Login(const string30 &userid, const string30 &password) {
         return;
     }
     if (!accountsystem_.CheckExist(userid)) {
+        std::cerr << "nouser\n";
         std::cout << "Invalid\n";
         return;
     }
     Account user = accountsystem_.FindAccount(userid);
     if (password.empty() && accountsystem_.NowPriviledge() <= user.priviledge) {
+        std::cerr << "nopasswordpriviledge\n";
         std::cout << "Invalid\n";
         return;
     }
     if (!password.empty() && user.password != password) {
+        std::cerr << "worngpassword\n";
         std::cout << "Invalid\n";
         return;
     }
@@ -119,14 +122,17 @@ inline void Operator::ModifyPassword
 inline void Operator::AddUser
 (const string30 &userid, const string30 &password, int priviledge, const string30 &username) {
     if (!CheckPriviledge(3)) {
+        std::cerr << "adduserpriviledge\n";
         std::cout << "Invalid\n";
         return;
     }
     if (priviledge >= accountsystem_.NowPriviledge()) {
+        std::cerr << "adduserpriviledgelow\n";
         std::cout << "Invalid\n";
         return;
     }
     if (accountsystem_.CheckExist(userid)) {
+        std::cerr << "adduersexist\n";
         std::cout << "Invalid\n";
         return;
     }
@@ -134,16 +140,19 @@ inline void Operator::AddUser
 }
 inline void Operator::DeleteUser(const string30 &userid) {
     if (!CheckPriviledge(7)) {
+        std::cerr << "delpri\n";
         std::cout << "Invalid\n";
         return;
     }
     if (!accountsystem_.CheckExist(userid)) {
+        std::cerr << "delnoexist\n";
         std::cout << "Invalid\n";
         return;
     }
     auto user = accountsystem_.FindAccount(userid);
     // std::cerr << user.online_cnt << "\n";
     if (user.online_cnt > 0) {
+        std::cerr << "delonline\n";
         std::cout << "Invalid\n";
         return;
     }
@@ -172,25 +181,30 @@ inline void Operator::Show(ShowOperator op, const string60 &other, const string2
 }
 inline void Operator::BuyBook(const string20 &isbn, int num) {
     if (!CheckPriviledge(1)) {
+        std::cerr << "not enough priviledge\n";
         std::cout << "Invalid\n";
         return;
     }
     if (!booksystem_.CheckExist(isbn)) {
+        std::cerr << "book no exist\n";
         std::cout << "Invalid\n";
         return;
     }
     int id = booksystem_.FindId(isbn);
     auto book = booksystem_.FindBook(id);
     if (book.rem < num) {
+        std::cerr << "book rem invalid " << isbn << " " << book.rem << "\n";
         std::cout << "Invalid\n";
         return;
     }
     booksystem_.BuyBook(id, num);
     logsystem_.AddFinance(book.price * num, 1);
+    std::cerr << "buy book success " << isbn << " " << num << " " << book.rem << " " << booksystem_.FindBook(id).rem << "\n";
     std::cout << std::fixed << std::setprecision(2) << book.price * num << "\n";
 }
 inline void Operator::Select(const string20 &isbn) {
     if (!CheckPriviledge(3)) {
+        std::cerr << "select priviledge invalid\n";
         std::cout << "Invalid\n";
         return;
     }
@@ -204,6 +218,7 @@ inline void Operator::Modify
 (const std::vector<ModifyOperator> &ops, const std::vector<string60> &others, 
  const string20 &isbn, double price) {
     if (!CheckPriviledge(3)) {
+        std::cerr << "modify priviledge invalid\n";
         std::cout << "Invalid\n";
         return;
     }

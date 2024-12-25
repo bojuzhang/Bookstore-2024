@@ -141,6 +141,7 @@ inline void Format::run() {
             std::cout << "Invalid\n";
         }
     }
+    operator_.LogoutAll();
 }
 
 inline void Format::Login() {
@@ -180,6 +181,7 @@ inline void Format::Register() {
             return;
         }
     }
+    std::cerr << "success register";
     operator_.Register(string30(p[0]), string30(p[1]), string30(p[2]));
 }
 inline void Format::ModifyPassword() {
@@ -256,6 +258,7 @@ inline void Format::Show() {
             }
             operator_.Show(ShowOperator::AUTHOR, string60(str), string20(""));
         } else if (op == "keyword") {
+            std::cerr << "testkeyword " << str << " " << str.find('|') << " " << str.npos << "\n";
             if (str.size() > 60 || str.empty() || str.find('|') != str.npos) {
                 std::cout << "Invalid\n";
                 return;
@@ -285,6 +288,7 @@ inline void Format::Show() {
 }
 inline void Format::BuyBook() {
     auto p =GetToken();
+    std::cerr << "test buy book\n";
     if (p.size() != 2) {
         std::cout << "Invalid\n";
         return;
@@ -304,6 +308,7 @@ inline void Format::BuyBook() {
         std::cout << "Invalid\n";
         return;
     }
+    std::cerr << "buy book token: " << p[0] << " " << p[1] << "\n";
     operator_.BuyBook(string20(p[0]), std::stoi(p[1]));
 }
 inline void Format::Select() {
