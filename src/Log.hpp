@@ -68,7 +68,7 @@ private:
     // TODO: WHOLE LOG
 public:
     LogSystem() {
-        finance_log_.initialise("finance_log_file");
+        finance_log_.initialise("finance_log_file", 1);
         finance_log_.get_info(history_count_, 1);
     }
     // tp: 1--> income -1-->outcome
