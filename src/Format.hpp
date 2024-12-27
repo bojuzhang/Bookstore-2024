@@ -16,6 +16,9 @@ private:
     Operator operator_;
     std::vector<std::string> GetToken();
     std::array<std::string, 2> ReleaseToken(std::string);
+    bool CheckUserInfo(const string &); 
+    bool CheckBookInfo(const string &);
+    bool CheckAll(const string &);
 
     void Login();
     void Logout();
@@ -80,6 +83,26 @@ inline std::array<std::string, 2> Format::ReleaseToken(std::string s) {
         ans[1].pop_back();
     }
     return ans;
+}
+
+inline bool Format::CheckUserInfo(const string &s) {
+    for (auto c : s) {
+        if (!std::isdigit(c) && !isalpha(c) && c != '_') {
+            return false;
+        }
+    }
+    return true;
+} 
+inline bool Format::CheckBookInfo(const string &s) {
+    return s.find('\"') == s.npos;
+}
+inline bool Format::CheckAll(const string &s) {
+    for (auto c : s) {
+        if (isspace(c) || std::iscntrl(c)) {
+            return false;
+        }
+    }
+    return true;
 }
 
 inline void Format::LogoutAll() {
@@ -154,7 +177,7 @@ inline void Format::Login() {
         p.push_back("");
     }
     for (const auto &s : p) {
-        if (s.size() > 30) {
+        if (s.size() > 30 || !CheckUserInfo(s) || !CheckAll(s)) {
             std::cout << "Invalid\n";
             return;
         }
@@ -176,10 +199,14 @@ inline void Format::Register() {
         return;
     }
     for (const auto &s : p) {
-        if (s.size() > 30) {
+        if (s.size() > 30 || !CheckAll(s)) {
             std::cout << "Invalid\n";
             return;
         }
+    }
+    if (!CheckUserInfo(p[0]) || !CheckUserInfo(p[1])) {
+        std::cout << "Invalid\n";
+        return;
     }
     std::cerr << "success register";
     operator_.Register(string30(p[0]), string30(p[1]), string30(p[2]));
@@ -191,7 +218,7 @@ inline void Format::ModifyPassword() {
         return;
     }
     for (const auto &s : p) {
-        if (s.size() > 30) {
+        if (s.size() > 30 || !CheckUserInfo(s) || !CheckAll(s)) {
             std::cout << "Invalid\n";
             return;
         }
@@ -208,6 +235,16 @@ inline void Format::AddUser() {
         std::cout << "Invalid\n";
         return;
     }
+    for (auto id : {0,1}) {
+        if (!CheckUserInfo(p[id]) || !CheckAll(p[id])) {
+            std::cout << "Invalid\n";
+            return;
+        }
+    }
+    if (!CheckAll(p[3])) {
+        std::cout << "Invalid\n";
+        return;
+    }
     operator_.AddUser(string30(p[0]), string30(p[1]), std::stoi(p[2]), string30(p[3]));
 }
 inline void Format::DeleteUser() {
@@ -216,7 +253,7 @@ inline void Format::DeleteUser() {
         std::cout << "Invalid\n";
         return;
     }
-    if (p[0].size() > 30) {
+    if (p[0].size() > 30 || !CheckUserInfo(p[0]) || !CheckAll(p[0])) {
         std::cout << "Invalid\n";
         return;
     }
@@ -240,26 +277,26 @@ inline void Format::Show() {
         auto t = ReleaseToken(p[0]);
         auto op = t[0], str = t[1];
         if (op == "ISBN") {
-            if (str.size() > 20 || str.empty()) {
+            if (str.size() > 20 || str.empty() || !CheckAll(str)) {
                 std::cout << "Invalid\n";
                 return;
             }
             operator_.Show(ShowOperator::ISBN, string60(""), string20(str));
         } else if (op == "name") {
-            if (str.size() > 60 || str.empty()) {
+            if (str.size() > 60 || str.empty() || !CheckBookInfo(str) || !CheckAll(str)) {
                 std::cout << "Invalid\n";
                 return;
             }
             operator_.Show(ShowOperator::BOOKNAME, string60(str), string20(""));
         } else if (op == "author") {
-            if (str.size() > 60 || str.empty()) {
+            if (str.size() > 60 || str.empty() || !CheckBookInfo(str) || !CheckAll(str)) {
                 std::cout << "Invalid\n";
                 return;
             }
             operator_.Show(ShowOperator::AUTHOR, string60(str), string20(""));
         } else if (op == "keyword") {
             std::cerr << "testkeyword " << str << " " << str.find('|') << " " << str.npos << "\n";
-            if (str.size() > 60 || str.empty() || str.find('|') != str.npos) {
+            if (str.size() > 60 || str.empty() || str.find('|') != str.npos || !CheckBookInfo(str) || !CheckAll(str)) {
                 std::cout << "Invalid\n";
                 return;
             }
@@ -297,6 +334,10 @@ inline void Format::BuyBook() {
         std::cout << "Invalid\n";
         return;
     }
+    if (!CheckBookInfo(p[0]) || !CheckAll(p[1])) {
+        std::cout << "Invalid\n";
+        return;
+    }
     for (auto c : p[1]) {
         if (!isdigit(c)) {
             std::cout << "Invalid\n";
@@ -317,7 +358,7 @@ inline void Format::Select() {
         std::cout << "Invalid\n";
         return;
     }
-    if (p[0].size() > 20) {
+    if (p[0].size() > 20 || !CheckAll(p[0])) {
         std::cout << "Invalid\n";
         return;
     }
@@ -337,28 +378,28 @@ inline void Format::Modify() {
         auto t = ReleaseToken(x);
         auto op = t[0], str = t[1];
         if (op == "ISBN") {
-            if (str.size() > 20 || str.empty()) {
+            if (str.size() > 20 || str.empty() || !CheckAll(str)) {
                 std::cout << "Invalid\n";
                 return;
             }
             ops.push_back(ModifyOperator::ISBN);
             isbn = string20(str);
         } else if (op == "name") {
-            if (str.size() > 60 || str.empty()) {
+            if (str.size() > 60 || str.empty() || !CheckBookInfo(str) || !CheckAll(str)) {
                 std::cout << "Invalid\n";
                 return;
             }
             ops.push_back(ModifyOperator::BOOKNAME);
             others.push_back(string60(str));
         } else if (op == "author") {
-            if (str.size() > 60 || str.empty()) {
+            if (str.size() > 60 || str.empty() || !CheckBookInfo(str) || !CheckAll(str)) {
                 std::cout << "Invalid\n";
                 return;
             }
             ops.push_back(ModifyOperator::AUTHOR);
             others.push_back(string60(str));
         } else if (op == "keyword") {
-            if (str.size() > 60 || str.empty()) {
+            if (str.size() > 60 || str.empty() || !CheckBookInfo(str) || !CheckAll(str)) {
                 std::cout << "Invalid\n";
                 return;
             }
