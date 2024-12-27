@@ -431,6 +431,14 @@ inline void Format::Modify() {
             return;
         }
     }
+    for (size_t i = 0; i < ops.size(); i++) {
+        for (size_t j = i + 1; j < ops.size(); j++) {
+            if (ops[i] == ops[j]) {
+                std::cout << "Invalid\n";
+                return;
+            }
+        }
+    }
     operator_.Modify(ops, others, isbn, price);
 }
 inline void Format::Import() {
