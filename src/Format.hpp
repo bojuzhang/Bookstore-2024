@@ -98,7 +98,7 @@ inline bool Format::CheckBookInfo(const string &s) {
 }
 inline bool Format::CheckAll(const string &s) {
     for (auto c : s) {
-        if (isspace(c) || std::iscntrl(c)) {
+        if (isspace(c) || c < 32 || c > 126) {
             return false;
         }
     }
