@@ -469,13 +469,13 @@ inline void Format::Import() {
 
 // TODO: WHOLE LOG
 inline void Format::Log() {
-
+    operator_.Log();
 }
 inline void Format::ReportFinance() {
     operator_.ReportFinance();
 }
 inline void Format::ReportEmployee() {
-
+    operator_.ReportEmployee();
 }
 
 #endif //FORMAT_HPP

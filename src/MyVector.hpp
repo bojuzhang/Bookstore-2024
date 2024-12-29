@@ -168,6 +168,13 @@ public:
         v = MyString(s);
         return is;
     }
+    std::string str() const {
+        std::string res;
+        for (int i = 0; i < this->size_; i++) {
+            res += this->a[i];
+        }
+        return res;
+    }
 };
 
 using string20 = MyString<20>;

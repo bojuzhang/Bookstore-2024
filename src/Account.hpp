@@ -58,6 +58,7 @@ public:
     void Select(int);
     int NowSelect();
     int NowPriviledge();
+    string30 Nowid();
     bool CheckExist(const string30 &);
 
     bool empty() { return stackaccount_.empty(); }
@@ -180,6 +181,9 @@ inline int AccountSystem::NowPriviledge() {
         return 0;
     }
     return stackaccount_.back().first.priviledge;
+}
+inline string30 AccountSystem::Nowid() {
+    return stackaccount_.back().first.userid;
 }
 
 inline bool AccountSystem::CheckExist(const string30 &userid) {
