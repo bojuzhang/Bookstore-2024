@@ -1,5 +1,6 @@
 #pragma once
 #include "Book.hpp"
+#include "Log.hpp"
 #ifndef FORMAT_HPP
 #define FORMAT_HPP
 #include <cstddef>
@@ -471,7 +472,7 @@ inline void Format::Log() {
 
 }
 inline void Format::ReportFinance() {
-
+    operator_.ReportFinance();
 }
 inline void Format::ReportEmployee() {
 

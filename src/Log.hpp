@@ -75,6 +75,9 @@ public:
     void AddFinance(double, int);
     int FinanceCount();
     void PrintFinance(int);
+    void ReportFinance();
+    void ReportEmployee();
+    void Log();
 };
 
 inline void LogSystem::AddFinance(double x, int tp) {
@@ -107,6 +110,33 @@ inline void LogSystem::PrintFinance(int count) {
     }
     std::cout << std::fixed << std::setprecision(2)
     << "+ " << now.first - p.first << " - " << std::abs(now.second - p.second) << "\n";
+}
+
+inline void LogSystem::ReportFinance() {
+    std::cout << "HISTORY FINANCE LOG\n";
+    std::pair<double, double> now, lst;
+    now = lst = {0, 0};
+    for (int i = 0; i < history_count_; i++) {
+        finance_log_.read(now, i);
+        std::cout << i + 1 << "-th OPERATION:\n";
+        if (now.first > lst.first) {
+            std::cout << "SALE:   " << std::setw(12) << std::fixed << std::setprecision(2) << now.first - lst.first << " "; 
+        } else {
+            std::cout << "IMPORT: " << std::setw(12) << std::fixed << std::setprecision(2) << lst.second - now.second << " ";
+        }
+        std::cout << "TOTALNOW: "  << std::fixed << std::setprecision(2)
+    << "+ " << std::setw(12) << now.first << "   - " << std::setw(12) << std::abs(now.second) << "\n";
+        lst = now;
+    }
+    std::cout << "\n";
+    std::cout << "TOTALALL:" << std::setw(24)  << std::fixed << std::setprecision(2)
+    << "+ " << std::setw(12) << lst.first << "   - " << std::setw(12) << std::abs(lst.second) << "\n";
+}
+inline void LogSystem::ReportEmployee() {
+
+}
+inline void LogSystem::Log() {
+
 }
 
 #endif

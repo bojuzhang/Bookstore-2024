@@ -277,4 +277,14 @@ inline void Operator::ShowFinance(int count, bool is_all) {
     }
 }
 
+inline void Operator::Log() {
+
+}
+inline void Operator::ReportFinance() {
+    logsystem_.ReportFinance();
+}
+inline void Operator::ReportEmployee() {
+
+}
+
 #endif // OPERATOR_HPP
