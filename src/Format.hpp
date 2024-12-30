@@ -100,7 +100,7 @@ inline bool Format::CheckBookInfo(const string &s) {
 }
 inline bool Format::CheckAll(const string &s) {
     for (auto c : s) {
-        if (isspace(c) || c < 32 || c > 126 || !std::isprint(c)) {
+        if (isspace(c) || !std::isprint(c)) {
             return false;
         }
     }
@@ -464,6 +464,10 @@ inline void Format::Modify() {
                 std::cout << "Invalid\n";
                 return;
             }
+            if (str[0] == '.') {
+                std::cout << "Invalid\n";
+                return;
+            }
             price = std::stod(str);
             if (price <= 0) {
                 std::cout << "Invalid\n";
@@ -510,6 +514,10 @@ inline void Format::Import() {
         if (c == '.') ++cnt_of_dot;
     }
     if (cnt_of_dot >= 2 || cnt_res > 2) {
+        std::cout << "Invalid\n";
+        return;
+    }
+    if (p[1][0] == '.') {
         std::cout << "Invalid\n";
         return;
     }
