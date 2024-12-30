@@ -1,6 +1,7 @@
 #pragma once
 #include "Book.hpp"
 #include "Log.hpp"
+#include <cstdint>
 #ifndef FORMAT_HPP
 #define FORMAT_HPP
 #include <cstddef>
@@ -479,6 +480,10 @@ inline void Format::Import() {
         if (c == '.') ++cnt_of_dot;
     }
     if (cnt_of_dot >= 2 || cnt_res > 2) {
+        std::cout << "Invalid\n";
+        return;
+    }
+    if (std::stoll(p[0]) > INT32_MAX || std::stoll(p[0]) < 0) {
         std::cout << "Invalid\n";
         return;
     }
