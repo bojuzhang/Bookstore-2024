@@ -100,7 +100,7 @@ inline bool Format::CheckBookInfo(const string &s) {
 }
 inline bool Format::CheckAll(const string &s) {
     for (auto c : s) {
-        if (isspace(c) || c < 32 || c > 126) {
+        if (isspace(c) || c < 32 || c > 126 || !std::isprint(c)) {
             return false;
         }
     }
