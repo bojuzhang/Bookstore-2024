@@ -146,6 +146,11 @@ inline void Format::run() {
         } else if (op == "import") {
             Import();
         } else if (op == "log") {
+            auto p = GetToken();
+            if (p.size()) {
+                std::cout << "Invalid\n";
+                return;
+            }
             Log();
         } else if (op == "report") {
             auto p = GetToken();
