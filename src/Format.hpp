@@ -306,6 +306,17 @@ inline void Format::Show() {
                 std::cout << "Invalid\n";
                 return;
             }
+            auto ve = ReleaseKeywords(str);
+            if (ve.size() > 1) {
+                std::cout << "Invalid\n";
+                return;
+            }
+            for (const auto &p : ve) {
+                if (p.empty()) {
+                    std::cout << "Invalid\n";
+                    return;
+                }
+            }
             operator_.Show(ShowOperator::KEYWORD, string60(str), string20(""));
         } else {
             std::cout << "Invalid\n";
@@ -418,6 +429,12 @@ inline void Format::Modify() {
                     return;
                 }
             }
+            for (const auto &p : ve) {
+                if (p.empty()) {
+                    std::cout << "Invalid\n";
+                    return;
+                }
+            }
             others.push_back(string60(str));
         } else if (op == "price") {
             if (str.size() > 13 || str.empty()) {
@@ -439,6 +456,10 @@ inline void Format::Modify() {
                 return;
             }
             price = std::stod(str);
+            if (price <= 0) {
+                std::cout << "Invalid\n";
+                return;
+            }
         } else {
             std::cout << "Invalid\n";
             return;
@@ -483,7 +504,7 @@ inline void Format::Import() {
         std::cout << "Invalid\n";
         return;
     }
-    if (std::stoll(p[0]) > INT32_MAX || std::stoll(p[0]) < 0) {
+    if (std::stoll(p[0]) > INT32_MAX || std::stoll(p[0]) <= 0 || std::stod(p[1]) <= 0) {
         std::cout << "Invalid\n";
         return;
     }
