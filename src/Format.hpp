@@ -424,11 +424,18 @@ inline void Format::Modify() {
                 return;
             }
             ops.push_back(ModifyOperator::PRICE);
+            int cnt_of_dot = 0, cnt_res = 0;
             for (auto c : str) {
                 if (!isdigit(c) && c != '.') {
                     std::cout << "Invalid\n";
                     return;
                 }
+                if (cnt_of_dot) ++cnt_res;
+                if (c == '.') ++cnt_of_dot;
+            }
+            if (cnt_of_dot >= 2 || cnt_res > 2) {
+                std::cout << "Invalid\n";
+                return;
             }
             price = std::stod(str);
         } else {
@@ -462,11 +469,18 @@ inline void Format::Import() {
             return;
         }
     }
+    int cnt_of_dot = 0, cnt_res = 0;
     for (auto c : p[1]) {
         if (!isdigit(c) && c != '.') {
             std::cout << "Invalid\n";
             return;
         }
+        if (cnt_of_dot) ++cnt_res;
+        if (c == '.') ++cnt_of_dot;
+    }
+    if (cnt_of_dot >= 2 || cnt_res > 2) {
+        std::cout << "Invalid\n";
+        return;
     }
     operator_.Import(std::stoi(p[0]), std::stod(p[1]));
 }
