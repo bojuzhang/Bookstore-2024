@@ -246,6 +246,10 @@ inline void Format::AddUser() {
         std::cout << "Invalid\n";
         return;
     }
+    if (p[2] != "1" || p[2] != "3" || p[2] != "7") {
+        std::cout << "Invalid\n";
+        return;
+    }
     operator_.AddUser(string30(p[0]), string30(p[1]), std::stoi(p[2]), string30(p[3]));
 }
 inline void Format::DeleteUser() {
