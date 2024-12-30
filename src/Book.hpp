@@ -73,6 +73,9 @@ inline std::vector<string60> ReleaseKeywords(const string60 &keyword) {
     if (tmp.size() > 0) {
         keywords.push_back(tmp);
     }
+    if (keyword.back() == '|') {
+        keywords.push_back(string60(""));
+    }
     return keywords;
 };
 
