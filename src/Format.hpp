@@ -149,14 +149,14 @@ inline void Format::run() {
             auto p = GetToken();
             if (p.size()) {
                 std::cout << "Invalid\n";
-                return;
+                continue;
             }
             Log();
         } else if (op == "report") {
             auto p = GetToken();
             if (p.size() != 1) {
                 std::cout << "Invalid\n";
-                return;
+                continue;
             }
             if (p[0] == "finance") {
                 ReportFinance();
