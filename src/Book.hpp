@@ -16,7 +16,7 @@ struct Book{
     string60 bookname{}, author{};
     string60 keyword{};
     int id{};
-    int rem{};
+    long long rem{};
     double price{};
 
     // Book() = delete;
