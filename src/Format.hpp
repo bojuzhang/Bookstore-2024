@@ -337,6 +337,10 @@ inline void Format::Show() {
                 return;
             }
         }
+        if (std::stoll(p[1]) >= INT32_MAX) {
+            std::cout << "Invalid\n";
+            return;
+        }
         operator_.ShowFinance(std::stoi(p[1]), 0);
     }
 }
@@ -504,7 +508,7 @@ inline void Format::Import() {
         std::cout << "Invalid\n";
         return;
     }
-    if (std::stoll(p[0]) > INT32_MAX || std::stoll(p[0]) <= 0 || std::stod(p[1]) <= 0) {
+    if (std::stoll(p[0]) >= INT32_MAX || std::stoll(p[0]) <= 0 || std::stod(p[1]) <= 0) {
         std::cout << "Invalid\n";
         return;
     }
