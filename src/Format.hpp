@@ -246,7 +246,7 @@ inline void Format::AddUser() {
         std::cout << "Invalid\n";
         return;
     }
-    if (p[2] != "1" || p[2] != "3" || p[2] != "7") {
+    if (p[2] != "1" && p[2] != "3" && p[2] != "7") {
         std::cout << "Invalid\n";
         return;
     }
