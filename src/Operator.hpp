@@ -289,7 +289,7 @@ inline void Operator::ShowFinance(int count, bool is_all) {
         return;
     }
     if (is_all) {
-        logsystem_.PrintFinance(logsystem_.FinanceCount());
+        logsystem_.PrintFinance(logsystem_.FinanceCount(), 1);
     } else {
         if (count > logsystem_.FinanceCount()) {
             std::cout << "Invalid\n";

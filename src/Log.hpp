@@ -86,7 +86,7 @@ public:
     // tp: 1--> income -1-->outcome
     void AddFinance(double, int);
     int FinanceCount();
-    void PrintFinance(int);
+    void PrintFinance(int, bool);
     void ReportFinance();
     std::vector<LogBase> AllLog();
     void Log();
@@ -109,7 +109,11 @@ inline void LogSystem::AddFinance(double x, int tp) {
 inline int LogSystem::FinanceCount() {
     return history_count_;
 }
-inline void LogSystem::PrintFinance(int count) {
+inline void LogSystem::PrintFinance(int count, bool is_all = 0) {
+    if (is_all && history_count_ == 0) {
+        std::cout << "+ 0.00 - 0.00\n";
+        return;
+    }
     if (!count) {
         std::cout << "\n";
         return;
