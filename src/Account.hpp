@@ -60,6 +60,7 @@ public:
     int NowPriviledge();
     string30 Nowid();
     bool CheckExist(const string30 &);
+    bool CheckOnline(const string30 &);
 
     bool empty() { return stackaccount_.empty(); }
     size_t size() { return stackaccount_.size(); }
@@ -134,6 +135,15 @@ inline bool Account::operator >= (const Account &other) const {
 }
 inline bool Account::operator != (const Account &other) const {
     return !((*this) == other);
+}
+
+inline bool AccountSystem::CheckOnline(const string30 &userid) {
+    for (const auto &p : stackaccount_) {
+        if (p.first.userid == userid) {
+            return true;
+        }
+    }
+    return false;
 }
 
 inline bool AccountSystem::CheckPassword(const string30 &userid, const string30 &password) {
