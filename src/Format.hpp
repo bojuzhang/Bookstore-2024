@@ -118,7 +118,9 @@ inline void Format::LogoutAll() {
 /* 2-1 : only account operator
         no quit/exit
         no delete
+        no passwd
         has useradd
+        
 */
 inline void Format::run() {
     std::string op;
@@ -139,6 +141,7 @@ inline void Format::run() {
         } else if (op == "logout") {
             Logout();
         } else if (op == "register") {
+            assert(0);
             Register();
         } else if (op == "passwd") {
             assert(0);
