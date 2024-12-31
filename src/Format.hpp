@@ -115,6 +115,9 @@ inline void Format::LogoutAll() {
     operator_.LogoutAll();
 }
 
+/* 2-1 : only account operator
+        no quit/exit
+*/
 inline void Format::run() {
     std::string op;
     while (std::cin >> op) {
@@ -140,6 +143,7 @@ inline void Format::run() {
         } else if (op == "useradd") {
             AddUser();
         } else if (op == "delete") {
+            assert(0);
             DeleteUser();
         } else if (op == "show") {
             assert(0);
