@@ -155,8 +155,8 @@ inline void Operator::DeleteUser(const string30 &userid) {
     }
     auto user = accountsystem_.FindAccount(userid);
     // std::cerr << user.online_cnt << "\n";
-    // if (user.online_cnt > 0) {
-    if (accountsystem_.CheckOnline(userid)) {
+    if (user.online_cnt > 0) {
+    // if (accountsystem_.CheckOnline(userid)) {
         std::cerr << "delonline\n";
         std::cout << "Invalid\n";
         return;
