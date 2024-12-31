@@ -177,9 +177,9 @@ public:
     }
 };
 
-using string20 = MyString<20>;
-using string30 = MyString<30>;
-using string60 = MyString<60>;
+using string20 = MyString<25>;
+using string30 = MyString<35>;
+using string60 = MyString<65>;
 
 // TEST_CASE("MyVector is correct", "[MyVector]") {
 //     MyVector<int, 100> ve;

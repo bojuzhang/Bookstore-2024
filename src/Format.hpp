@@ -121,6 +121,7 @@ inline void Format::LogoutAll() {
         no passwd
         no register
         no logout
+        no invalid first operator
         has useradd
         has su
 */
