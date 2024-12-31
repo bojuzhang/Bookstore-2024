@@ -1,6 +1,7 @@
 #pragma once
 #include "Book.hpp"
 #include "Log.hpp"
+#include <cassert>
 #include <cstdint>
 #ifndef FORMAT_HPP
 #define FORMAT_HPP
@@ -48,6 +49,9 @@ inline std::vector<std::string> Format::GetToken() {
     std::vector<std::string> v;
     std::string s, t;
     std::getline(std::cin, s);
+    // for (auto c : s) {
+    //     std::cerr << c << " " << (int)(c) << "\n";
+    // }
     for (auto c : s) {
         if (isspace(c)) {
             if (!t.empty()) {
@@ -114,6 +118,7 @@ inline void Format::LogoutAll() {
 inline void Format::run() {
     std::string op;
     while (std::cin >> op) {
+        // std::cerr << "new command\n";
         if (op == "quit" || op == "exit") {
             auto p = GetToken();
             if (p.empty()) {
@@ -136,6 +141,7 @@ inline void Format::run() {
         } else if (op == "delete") {
             DeleteUser();
         } else if (op == "show") {
+            assert(0);
             Show();
         } else if (op == "buy") {
             BuyBook();
