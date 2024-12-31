@@ -119,8 +119,8 @@ inline void Format::LogoutAll() {
         no quit/exit
         no delete
         no passwd
+        no register
         has useradd
-        
 */
 inline void Format::run() {
     std::string op;
@@ -139,6 +139,7 @@ inline void Format::run() {
         } else if (op == "su") {
             Login();
         } else if (op == "logout") {
+            assert(0);
             Logout();
         } else if (op == "register") {
             assert(0);
