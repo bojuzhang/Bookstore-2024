@@ -117,6 +117,7 @@ inline void Format::LogoutAll() {
 
 /* 2-1 : only account operator
         no quit/exit
+        no delete
 */
 inline void Format::run() {
     std::string op;
@@ -141,6 +142,7 @@ inline void Format::run() {
         } else if (op == "passwd") {
             ModifyPassword();
         } else if (op == "useradd") {
+            assert(0);
             AddUser();
         } else if (op == "delete") {
             assert(0);
