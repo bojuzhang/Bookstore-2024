@@ -122,6 +122,7 @@ inline void Format::LogoutAll() {
         no register
         no logout
         has useradd
+        has su
 */
 inline void Format::run() {
     std::string op;
@@ -138,7 +139,6 @@ inline void Format::run() {
                 continue;
             }
         } else if (op == "su") {
-            assert(0);
             Login();
         } else if (op == "logout") {
             assert(0);
@@ -193,6 +193,7 @@ inline void Format::run() {
                 continue;
             }
         } else {
+            assert(0);
             GetToken();
             std::cout << "Invalid\n";
         }
