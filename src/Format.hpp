@@ -120,6 +120,7 @@ inline void Format::run() {
     while (std::cin >> op) {
         // std::cerr << "new command\n";
         if (op == "quit" || op == "exit") {
+            assert(0);
             auto p = GetToken();
             if (p.empty()) {
                 LogoutAll();
@@ -144,14 +145,19 @@ inline void Format::run() {
             assert(0);
             Show();
         } else if (op == "buy") {
+            assert(0);
             BuyBook();
         } else if (op == "select") {
+            assert(0);
             Select();
         } else if (op == "modify") {
+            assert(0);
             Modify();
         } else if (op == "import") {
+            assert(0);
             Import();
         } else if (op == "log") {
+            assert(0);
             auto p = GetToken();
             if (p.size()) {
                 std::cout << "Invalid\n";
@@ -159,6 +165,7 @@ inline void Format::run() {
             }
             Log();
         } else if (op == "report") {
+            assert(0);
             auto p = GetToken();
             if (p.size() != 1) {
                 std::cout << "Invalid\n";
