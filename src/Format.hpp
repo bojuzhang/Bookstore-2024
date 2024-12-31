@@ -120,6 +120,7 @@ inline void Format::LogoutAll() {
         no delete
         no passwd
         no register
+        no logout
         has useradd
 */
 inline void Format::run() {
@@ -137,6 +138,7 @@ inline void Format::run() {
                 continue;
             }
         } else if (op == "su") {
+            assert(0);
             Login();
         } else if (op == "logout") {
             assert(0);
