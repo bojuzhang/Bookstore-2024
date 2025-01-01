@@ -130,7 +130,6 @@ inline void Format::run() {
     while (std::cin >> op) {
         // std::cerr << "new command\n";
         if (op == "quit" || op == "exit") {
-            assert(0);
             auto p = GetToken();
             if (p.empty()) {
                 LogoutAll();
@@ -142,36 +141,26 @@ inline void Format::run() {
         } else if (op == "su") {
             Login();
         } else if (op == "logout") {
-            assert(0);
             Logout();
         } else if (op == "register") {
-            assert(0);
             Register();
         } else if (op == "passwd") {
-            assert(0);
             ModifyPassword();
         } else if (op == "useradd") {
             AddUser();
         } else if (op == "delete") {
-            assert(0);
             DeleteUser();
         } else if (op == "show") {
-            assert(0);
             Show();
         } else if (op == "buy") {
-            assert(0);
             BuyBook();
         } else if (op == "select") {
-            assert(0);
             Select();
         } else if (op == "modify") {
-            assert(0);
             Modify();
         } else if (op == "import") {
-            assert(0);
             Import();
         } else if (op == "log") {
-            assert(0);
             auto p = GetToken();
             if (p.size()) {
                 std::cout << "Invalid\n";
@@ -179,7 +168,6 @@ inline void Format::run() {
             }
             Log();
         } else if (op == "report") {
-            assert(0);
             auto p = GetToken();
             if (p.size() != 1) {
                 std::cout << "Invalid\n";
@@ -194,7 +182,6 @@ inline void Format::run() {
                 continue;
             }
         } else {
-            assert(0);
             GetToken();
             std::cout << "Invalid\n";
         }
@@ -497,7 +484,7 @@ inline void Format::Modify() {
                 return;
             }
             price = std::stod(str);
-            if (price <= 0) {
+            if (price < 0) {
                 std::cout << "Invalid\n";
                 return;
             }
